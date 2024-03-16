@@ -1,55 +1,55 @@
 AffiliateProg
 =============
 
-A custom theme based on \_tw
+Tema personalizado baseado em _TW
 
-## Quickstart
+## Início Rápido
 
-### Installation
+### Instalação
 
-1. Move this folder to `wp-content/themes` in your local development environment
-2. Run `npm install && npm run dev` in this folder
-3. Activate this theme in WordPress
+1. Mova esta pasta para `wp-content/themes` em seu ambiente de desenvolvimento local
+2. Execute `npm install && npm run dev` nesta pasta
+3. Ative este tema no WordPress
 
-### Development
+### Desenvolvimento
 
-4. Run `npm run watch`
-5. Add [Tailwind utility classes](https://tailwindcss.com/docs/utility-first) with abandon
+4. Execute `npm run watch`
+5. Adicione [classes de utilitário do Tailwind](https://tailwindcss.com/docs/utility-first) livremente
 
-### Deployment
+### Implantação
 
-6. Run `npm run bundle`
-7. Upload the resulting zip file to your site using the “Upload Theme” button on the “Add Themes” administration page
+6. Execute `npm run bundle`
+7. Faça o upload do arquivo zip resultante para o seu site usando o botão "Enviar Tema" na página de administração "Adicionar Temas"
 
-Or [deploy with the tool of your choice](https://underscoretw.com/docs/deployment/#h-other-deployment-options)!
+Ou [implante com a ferramenta de sua escolha](https://underscoretw.com/docs/deployment/#h-other-deployment-options)!
 
-## Full Documentation
+## Documentação Completa
 
-### Fundamentals
+### Fundamentos
 
-* [Installation](https://underscoretw.com/docs/installation/)  
-  Generate your custom theme, install it in WordPress and run your first Tailwind builds
-* [Development](https://underscoretw.com/docs/development/)  
-  Watch for changes, build for production and learn more about how _tw, WordPress and Tailwind work together
-* [Deployment](https://underscoretw.com/docs/deployment/)  
-  Share your new WordPress theme with the world
-* [Troubleshooting](https://underscoretw.com/docs/troubleshooting/)  
-  Find solutions to potential issues and answers to frequently asked questions
+* [Instalação](https://underscoretw.com/docs/installation/)  
+  Gere seu tema personalizado, instale-o no WordPress e execute suas primeiras compilações do Tailwind
+* [Desenvolvimento](https://underscoretw.com/docs/development/)  
+  Fique atento às mudanças, compile para produção e saiba mais sobre como _tw, WordPress e Tailwind funcionam juntos
+* [Implantação](https://underscoretw.com/docs/deployment/)  
+  Compartilhe seu novo tema do WordPress com o mundo
+* [Resolução de Problemas](https://underscoretw.com/docs/troubleshooting/)  
+  Encontre soluções para possíveis problemas e respostas para perguntas frequentes
 
-### In Depth
+### Em Detalhes
 
-* [Using Tailwind Typography](https://underscoretw.com/docs/tailwind-typography/)  
-  Customize front-end and back-end typographic styles
-* [JavaScript Bundling with esbuild](https://underscoretw.com/docs/esbuild/)  
-  Install and bundle JavaScript libraries (very quickly)
-* [Linting and Code Formatting](https://underscoretw.com/docs/linting-code-formatting/)  
-  Catch bugs and stop thinking about formatting
+* [Usando a Tipografia do Tailwind](https://underscoretw.com/docs/tailwind-typography/)  
+  Personalize estilos tipográficos de front-end e back-end
+* [Empacotamento JavaScript com esbuild](https://underscoretw.com/docs/esbuild/)  
+  Instale e empacote bibliotecas JavaScript (muito rapidamente)
+* [Linting e Formatação de Código](https://underscoretw.com/docs/linting-code-formatting/)  
+  Detecte bugs e pare de se preocupar com a formatação
 
 ### Extras
 
-* [On Tailwind and WordPress](https://underscoretw.com/docs/wordpress-tailwind/)  
-  Understand how WordPress and Tailwind work together
-* [Managing Styles for Custom Blocks](https://underscoretw.com/docs/custom-blocks/)  
-  Learn strategies for using Tailwind in theme-specific custom blocks
-* [Setting Up Browsersync](https://underscoretw.com/docs/browsersync/)  
-  Add live reloads and synchronized cross-device testing to your workflow
+* [Sobre Tailwind e WordPress](https://underscoretw.com/docs/wordpress-tailwind/)  
+  Entenda como WordPress e Tailwind trabalham juntos
+* [Gerenciando Estilos para Blocos Personalizados](https://underscoretw.com/docs/custom-blocks/)  
+  Aprenda estratégias para usar o Tailwind em blocos personalizados específicos do tema
+* [Configurando o Browsersync](https://underscoretw.com/docs/browsersync/)  
+  Adicione recargas ao vivo e testes sincronizados entre dispositivos ao seu fluxo de trabalho
