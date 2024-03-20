@@ -11,12 +11,15 @@ get_header();
 
 ?>
 
+
+<?php get_footer(); ?>
+
 <div class="flex w-full h-screen">
 	<!-- SIDEBAR -->
-	<aside id="sidebar" class="fixed relative top-0 left-0 z-20 flex flex-col flex-shrink-0 hidden w-64 h-screen pt-16 font-normal duration-75 lg:flex transition-width" aria-label="Sidebar">
-		<div class="relative flex flex-col flex-1 min-h-0 pt-0 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+<aside id="sidebar" class="absolute md:relative top-0 left-0 z-40 sm:z-0 flex flex-col flex-shrink-0 sm:visible w-64 h-screen pt-16 font-normal duration-75 lg:flex transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+		<div class="relative flex flex-col flex-1 min-h-0 pt-0 bg-verde-10% border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
 			<div class="flex flex-col flex-1 pt-5 pb-4 overflow-y-auto">
-				<div class="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+				<div class="flex-1 px-3 space-y-1 divide-y divide-gray-200 dark:divide-gray-700">
 					<ul class="pb-2 space-y-2">
 						<li>
 							<form action="#" method="GET" class="lg:hidden">
@@ -32,15 +35,15 @@ get_header();
 						<?php foreach ($contents as $key => $content) : ?>
 							<li>
 								<?php if ($key === $view) : ?>
-								<a href="<?php echo esc_url(add_query_arg('content', $key, get_permalink())); ?>" class="flex items-center rounded-3xl bg-slate-200 p-4">
-									<?php echo $content['icon']; ?>
-									<?php echo $content['title']; ?>
-								</a>
+									<a href="<?php echo esc_url(add_query_arg('content', $key, get_permalink())); ?>" class="flex items-center rounded-3xl bg-slate-200 p-4">
+										<?php echo $content['icon']; ?>
+										<?php echo $content['title']; ?>
+									</a>
 								<?php else: ?>
-								<a href="<?php echo esc_url(add_query_arg('content', $key, get_permalink())); ?>" class="flex items-center p-4">
-									<?php echo $content['icon']; ?>
-									<?php echo $content['title']; ?>
-								</a>
+									<a href="<?php echo esc_url(add_query_arg('content', $key, get_permalink())); ?>" class="flex items-center p-4">
+										<?php echo $content['icon']; ?>
+										<?php echo $content['title']; ?>
+									</a>
 								<?php endif; ?>
 
 							</li>
@@ -137,9 +140,9 @@ get_header();
 	<div class="fixed inset-0 z-10 hidden bg-gray-900/50 dark:bg-gray-900/90" id="sidebarBackdrop"></div>
 
 	<!-- END SIDEBAR -->
-	<main class="w-full flex flex-col pb-4 bg-gray-200">
+	<main class="w-full flex flex-col pb-4 bg-cinza-10%">
 		<!-- INICIO-HEADER -->
-		<header class="entry-header">
+		<header class="entry-header h-[71px]">
 
 			<?php
 			if ( is_sticky() && is_home() && ! is_paged() ) {
@@ -155,7 +158,7 @@ get_header();
 		</header><!-- .entry-header -->
 		<!-- FIM-HEADER -->
 		<div class="content col-span-5 rounded-box  mt-5 mb-5 mr-5 ml-5 max-h-[690px] overflow-y-scroll" id="content">
-			<div class="w-full h-full bg-gray-200">
+			<div class="w-full h-full">
 				<?php
 				// Verificar se o template correspondente ao parâmetro 'content' existe
 				if (!empty($view) && file_exists(get_template_directory() . "/template-parts/roles/{$cargo}/{$view}-content.php")) {
@@ -170,6 +173,5 @@ get_header();
 		<?php get_template_part( 'template-parts/layout/footer', 'content' ); ?>
 	</main>
 </div>
-<?php get_footer(); ?>
 
 

@@ -11,9 +11,19 @@ module.exports = {
 		'./theme/**/*.php',
 		"./node_modules/flowbite/**/*.js"
 	],
+
 	theme: {
 		// Extend the default Tailwind theme.
-		extend: {},
+		extend: {
+			colors: {
+				verde: "#41837F",
+				'verde-10%': "#F8F9FA",
+				'cinza-10%': "rgba(113, 113, 113, 0.1)"
+			},
+			background_image: {
+				contactBg: "url('../img/Background.svg')"
+			}
+		},
 	},
 	corePlugins: {
 		// Disable Preflight base styles in builds targeting the editor.
