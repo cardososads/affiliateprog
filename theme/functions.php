@@ -150,7 +150,7 @@ function affiliateprog_scripts() {
 	wp_enqueue_style( 'affiliateprog-style-nocomp', get_template_directory_uri() . '/style-nocomp.css', array(), AFFILIATEPROG_VERSION );
 	wp_enqueue_script('flowbite-script', 'https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js', array(), AFFILIATEPROG_VERSION, false);
 	wp_enqueue_script( 'affiliateprog-script', get_template_directory_uri() . '/js/script.min.js', array(), AFFILIATEPROG_VERSION, true );
-//	wp_enqueue_script( 'affiliateprog-custom-script', get_template_directory_uri() . '/js/scripts.js', array(), AFFILIATEPROG_VERSION, false );
+	wp_enqueue_script( 'affiliateprog-custom-script', get_template_directory_uri() . '/js/scripts.js', array(), AFFILIATEPROG_VERSION, false );
 //	wp_enqueue_script( 'affiliateprog-htmx-script', get_template_directory_uri() . '/js/htmx.min.js', array(), AFFILIATEPROG_VERSION, false );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
@@ -228,4 +228,14 @@ require get_template_directory() . '/inc/users/user-menu-contents.php';
 
 /* Disable WordPress Admin Bar for all users */
 add_filter( 'show_admin_bar', '__return_false' );
+
+function enqueue_chart_js() {
+	// Registre a biblioteca Chart.js do CDN
+	wp_register_script('chart-js', 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js', array(), null, true);
+
+	// Adicione a biblioteca ao frontend
+	wp_enqueue_script('chart-js');
+}
+add_action('wp_enqueue_scripts', 'enqueue_chart_js');
+
 

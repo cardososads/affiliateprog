@@ -1,106 +1,128 @@
 <section class="mt-5">
 	<div class="flex w-full gap-[30px]">
-		<div class="flex flex-col items-start w-[782px] p-[40px] gap-[37px] rounded-[10px] border-[1px] border-[#F8F9FA] bg-white shadow">
-			<div class="flex">
+		<div class="flex flex-col items-start w-full p-[40px] gap-[37px] rounded-[10px] border-[1px] border-[#F8F9FA] bg-white shadow">
+			<div class="flex items-center">
 				<div class="relative mr-[22px] ">
 					<img class="w-[80px] h-[80px] rounded" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0OMHEKM45qri2RzU_TfNJgVKzlEYLB_iwP18p4lN83w&s" alt="Large avatar">
-					<a href="#">
-					<span class="bg-white shadow w-[26px] h-[26px] flex justify-center items-center font-medium text-blue-800 text-center leading-none rounded-[8px] absolute translate-y-1/2 translate-x-1/2 left-auto bottom-0 right-0">
-						<svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" viewBox="0 0 12 13" fill="none">
-						<g clip-path="url(#clip0_4_24)">
-						<path d="M1.49977 9.58254V11.1025C1.49977 11.2425 1.60977 11.3525 1.74977 11.3525H3.26977C3.33477 11.3525 3.39977 11.3275 3.44477 11.2775L8.90477 5.82254L7.02977 3.94754L1.57477 9.40254C1.52477 9.45254 1.49977 9.51254 1.49977 9.58254ZM10.3548 4.37254C10.5498 4.17754 10.5498 3.86254 10.3548 3.66754L9.18477 2.49754C8.98977 2.30254 8.67477 2.30254 8.47977 2.49754L7.56477 3.41254L9.43977 5.28754L10.3548 4.37254V4.37254Z" fill="#41837F"/>
-						</g>
-						<defs>
-						<clipPath id="clip0_4_24">
-						<rect width="12" height="12" fill="white" transform="translate(-0.000228882 0.852539)"/>
-						</clipPath>
-						</defs>
-						</svg>
-					</span>
-					</a>
 				</div>
 				<div>
 					<p class="text-[#2D3748] text-[18px] font-semibold">Nome Completo</p>
 					<span class="text-[#718096] text-[14px] font-normal leading-[21px]">email@email.com.br</span>
 				</div>
 			</div>
-			<div class="flex flex-col">
-				<div>
-					<h4 class="text-[#2D3748] text-[18px] font-semibold leading-[25px] mb-[16px]">Informações do perfil</h4>
-					<p class="text-[#A0AEC0] text-[16px] font-normal leading-[24px]">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-					<hr class="mt-[6px] mb-[30px]">
-					<div class="flex">
-						<ul class="w-[50%] flex flex-col gap-[18px]">
-							<li class="text-[#718096] text-[12px]"><strong>Nome completo:</strong> Wesley Cardoso</li>
-							<li class="text-[#718096] text-[12px]"><strong>E-mail:</strong> wesley@mail.com.br</li>
-							<li class="text-[#718096] text-[12px]"><strong>Localização:</strong> Roraima - RR</li>
-							<li class="text-[#718096] text-[12px]"><strong>Empresa:</strong> Automotores S.A</li>
-							<li class="text-[#718096] text-[12px]"><strong>Media Social:</strong><span>logos</span></li>
-						</ul>
-						<div class="w-[50%] flex justify-end items-end">
-							<button data-modal-target="edit-infos" data-modal-toggle="edit-infos" class="px-[20px] py-[10px] rounded-[5px] border-[1px] border-verde text-verde text-[10px]">
-								Editar Informações
-							</button>
+		</div>
+	</div>
 
-							<div id="edit-infos" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-								<div class="relative p-4 w-full max-w-2xl max-h-full">
-									<!-- Modal content -->
-									<div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-										<!-- Modal header -->
-										<div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-											<h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-												Altere os seus dados
-											</h3>
-											<button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="edit-infos">
-												<svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-													<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-												</svg>
-												<span class="sr-only">Close modal</span>
-											</button>
-										</div>
-										<!-- Modal body -->
-										<div class="p-4 md:p-5 space-y-4">
-											<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-												With less than a month to go before the European Union enacts new consumer privacy laws for its citizens, companies around the world are updating their terms of service agreements to comply.
-											</p>
-											<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-												The European Union’s General Data Protection Regulation (G.D.P.R.) goes into effect on May 25 and is meant to ensure a common set of data rights in the European Union. It requires organizations to notify users as soon as possible of high-risk data breaches that could personally affect them.
-											</p>
-										</div>
-										<!-- Modal footer -->
-										<div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-											<button data-modal-hide="edit-infos" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I accept</button>
-											<button data-modal-hide="edit-infos" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
-										</div>
-									</div>
-								</div>
-							</div>
+
+	<div class="flex gap-[30px]">
+		<div class="flex flex-col w-1/2 rounded-lg bg-white p-6 my-8">
+			<h2 class="text-2xl font-semibold">Link de Afiliado</h2>
+			<div class="flex flex-col gap-4">
+				<form action="" class="flex gap-4 w-[80%]">
+					<input class="rounded-lg border border-gray-300 px-4 py-2 flex-grow" type="text" placeholder="Insira seu link de afiliado aqui">
+					<button class="px-4 py-2 bg-green-600 text-white rounded-lg" type="submit">Compartilhar link</button>
+				</form>
+				<div class="p-6 bg-gray-100 flex flex-col gap-2 w-[90%] shadow rounded-lg">
+					<h3 class="text-2xl font-semibold mb-4">Convite via e-mail</h3>
+					<form action="" class="flex flex-col gap-4">
+						<div class="flex flex-col">
+							<label for="email">E-mail</label>
+							<input class="rounded-lg border border-gray-300 px-4 py-2" type="email" name="email" placeholder="E-mail">
 						</div>
-					</div>
+						<div class="flex flex-col">
+							<label for="empresa">Empresa</label>
+							<input class="rounded-lg border border-gray-300 px-4 py-2" type="text" name="empresa" placeholder="Nome da empresa">
+						</div>
+						<button class="px-[30px] py-[10px] bg-green-600 text-white rounded-lg self-end" type="submit">Convidar</button>
+					</form>
 				</div>
 			</div>
 		</div>
-		<div class="flex flex-col items-start w-[782px] h p-[40px] gap-[37px] rounded-[10px] border-[1px] border-[#F8F9FA] shadow" style="background-image: url('<?= get_template_directory_uri() . '/img/Background.svg' ?>')">
-			<div class="flex flex-col h-[60%] justify-end">
-				<h3 class="my-5 text-[18px] text-white font-semibold leading-loose">Precisa de ajuda?</h3>
-				<p class="text-[16px] text-white font-normal leading-normal">
-					Por favor, entre em contato conosco,
-					<br>em breve um responsável pelo suporte retornará o seu chamado.
-				</p>
-			</div>
-			<div class="flex w-full h-[40%] justify-end items-end">
-				<button class="flex gap-[10px] px-[20px] py-[10px] rounded-[5px] border-[1px] bg-white text-verde text-[10px] mx-[30px]">
-					<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
-						<path d="M7.5 0C3.35813 0 0 3.35813 0 7.5C0 8.90701 0.395213 10.2188 1.06934 11.344L0.0671387 15L3.80127 14.0198C4.89335 14.6407 6.15406 15 7.5 15C11.6419 15 15 11.6419 15 7.5C15 3.35813 11.6419 0 7.5 0ZM4.93286 4.00146C5.05474 4.00146 5.17996 4.00072 5.28809 4.00635C5.42184 4.00947 5.56741 4.01927 5.70679 4.32739C5.87241 4.69364 6.23305 5.61244 6.2793 5.70557C6.32555 5.79869 6.35832 5.9084 6.29394 6.03027C6.23269 6.15527 6.20084 6.23093 6.11084 6.34155C6.01771 6.44905 5.91567 6.58257 5.8313 6.66382C5.73817 6.75694 5.64201 6.85905 5.74951 7.04468C5.85701 7.2303 6.23035 7.83883 6.78223 8.33008C7.4916 8.96383 8.09012 9.15858 8.27637 9.25171C8.46262 9.34483 8.57048 9.33032 8.67798 9.20532C8.7886 9.08345 9.14258 8.66525 9.26758 8.479C9.38945 8.29275 9.51387 8.32498 9.68262 8.38623C9.85387 8.44748 10.7671 8.89735 10.9534 8.99048C11.1396 9.0836 11.2617 9.1297 11.3086 9.20532C11.3567 9.28345 11.3568 9.65536 11.2024 10.0891C11.048 10.5222 10.29 10.9411 9.94995 10.9705C9.60683 11.0023 9.2866 11.1247 7.71973 10.5078C5.82973 9.76344 4.6378 7.82764 4.54468 7.70264C4.45155 7.58076 3.78784 6.69619 3.78784 5.78369C3.78784 4.86807 4.26791 4.41965 4.43604 4.2334C4.60729 4.04715 4.80786 4.00146 4.93286 4.00146Z" fill="#41837F"/>
-					</svg>
-					Chat Via Whatsapp
-				</button>
-				<button class="px-[20px] py-[10px] rounded-[5px] border-[1px] border-white bg-[#4FD1C5;] text-white text-[10px]">Abrir Chamado</button>
+		<div class="w-[50%]">
+			<div class="w-full rounded-[10px] bg-white p-[40px] my-[30px]">
+				<h2 class="text-xl font-semibold">Meta Mensal</h2>
+				<div >
+					<div class="w-full" ">
+						<canvas id="bar-chart"></canvas>
+					</div>
+
+					<script>
+						// Dados do gráfico (supondo que você tenha esses dados)
+						const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio'];
+						const monthlyGoals = [100, 150, 200, 180, 220]; // Metas mensais
+
+						// Criar gráfico de barras
+						var ctx = document.getElementById('bar-chart').getContext('2d');
+						var myChart = new Chart(ctx, {
+							type: 'bar',
+							data: {
+								labels: months,
+								datasets: [{
+									label: 'Meta Mensal',
+									data: monthlyGoals,
+									backgroundColor: 'rgb(65,131,127)', // Cor de fundo das barras
+									//borderColor: 'rgba(54, 162, 235, 1)', // Cor da borda das barras
+									borderWidth: 1
+								}]
+							},
+							options: {
+								scales: {
+									y: {
+										beginAtZero: true,
+										title: {
+											display: true,
+											text: 'Meta'
+										}
+									},
+									x: {
+										title: {
+											display: true,
+											text: 'Mês'
+										}
+									}
+								}
+							}
+						});
+					</script>
+
+				</div>
 			</div>
 		</div>
 	</div>
+
+	<div class="w-full rounded-[10px] bg-white p-[40px] my-[30px] overflow-y-scroll">
+		<h2 class="text-xl font-semibold">Link de Afiliado</h2>
+		<div>
+			<form action="">
+				<input class="rounded-lg" type="text">
+				<button type="submit">Compartilhar link</button>
+			</form>
+			<h3>Convite via e-mail</h3>
+			<form class="flex flex-col" action="">
+				<label for="email">E-mail</label>
+				<input class="rounded-lg" type="email" name="email" placeholder="E-mail">
+				<div class="h-[20px]"></div>
+				<label for="empresa">Empresa</label>
+				<input class="rounded-lg" type="text" name="empresa" placeholder="Nome da empresa">
+				<div class="self-end">
+					<button type="submit">Convidar</button>
+				</div>
+			</form>
+		</div>
+	</div>
 	<div class="w-full rounded-[10px] bg-white p-[40px] my-[30px]">
-			<h2 class="text-gray-700 text-[25px] font-semibold leading-[35px] pb-[20px]">Lista de Aprovações</h2>
+		<h2 class="text-gray-700 text-[25px] font-semibold leading-[35px] pb-[20px]">Lista de Aprovações</h2>
+		<div class="flex gap-[50px] mb-8">
+			<button class="px-[30px] py-[10px] text-xl shadow-button shadow-neutral-800 rounded-3xl">
+				Aprovados
+			</button>
+			<button class="px-[30px] py-[10px] text-xl shadow-button shadow-neutral-800 rounded-3xl">
+				Pendentes
+			</button>
+			<button class="px-[30px] py-[10px] text-xl shadow-button sha shadow-neutral-800 rounded-3xl">
+				Reprovados
+			</button>
+		</div>
 		<div class="flex gap-[40px]">
 			<div class="w-[50%] px-[50px] py-[20px] bg-[#f1f1f1] rounded-[10px] shadow">
 				<div class="flex justify-between">

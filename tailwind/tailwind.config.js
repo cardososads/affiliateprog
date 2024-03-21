@@ -14,11 +14,16 @@ module.exports = {
 
 	theme: {
 		// Extend the default Tailwind theme.
+
 		extend: {
+			boxShadow: {
+				'button': '0 0 40px -15px rgba(0, 0, 0, 0.3)',
+			},
 			colors: {
 				verde: "#41837F",
 				'verde-10%': "#F8F9FA",
-				'cinza-10%': "rgba(113, 113, 113, 0.1)"
+				'cinza-10%': "rgba(113, 113, 113, 0.1)",
+				customgreen: '#448771'
 			},
 			background_image: {
 				contactBg: "url('../img/Background.svg')"
