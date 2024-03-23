@@ -109,6 +109,54 @@ add_filter( 'excerpt_more', 'affiliateprog_continue_reading_link' );
 // Filter the content more link.
 add_filter( 'the_content_more_link', 'affiliateprog_continue_reading_link' );
 
+function process_csv_upload()
+{
+	if (isset($_FILES['csv_file'])) {
+		$file = $_FILES['csv_file'];
+		echo '<pre>';
+		var_dump($file);
+		echo '</pre>';
+		// Verifica se o arquivo é um arquivo CSV
+		if ($file['type'] == 'text/csv' || $file['type'] == 'application/vnd.ms-excel' || $file['type'] == 'application/csv' || $file['type'] == 'application/octet-stream' || $file['type'] == 'text/comma-separated-values' || $file['type'] == 'text/plain' || $file['type'] == 'application/octet-stream' || $file['type'] == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || $file['type'] == 'application/vnd.ms-excel.sheet.macroEnabled.12') {
+			// Diretório de destino para salvar o arquivo CSV
+			$upload_dir = wp_upload_dir();
+			$upload_path = $upload_dir['path'] . '/' . basename($file['name']);
+
+			// Move o arquivo CSV para o diretório de upload
+			if (move_uploaded_file($file['tmp_name'], $upload_path)) {
+				// Aqui você pode adicionar código para processar o arquivo CSV
+				echo 'Arquivo CSV enviado com sucesso!';
+
+				// Exibe o conteúdo do arquivo CSV
+				if (($handle = fopen($upload_path, "r")) !== FALSE) {
+					echo '<table>';
+					while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+						echo '<tr>';
+						foreach ($data as $cell) {
+							echo '<td>' . htmlspecialchars($cell) . '</td>';
+						}
+						echo '</tr>';
+					}
+					fclose($handle);
+					echo '</table>';
+				}
+			} else {
+				echo 'Erro ao enviar o arquivo.';
+			}
+		} else {
+			echo 'Por favor, envie um arquivo CSV válido.';
+		}
+	}
+	exit;
+}
+
+// Adiciona a ação para processar o upload do CSV
+add_action('admin_post_process_csv_upload', 'process_csv_upload');
+add_action('admin_post_nopriv_process_csv_upload', 'process_csv_upload');
+
+
+
+
 /**
  * Outputs a comment in the HTML5 format.
  *
@@ -204,3 +252,4 @@ function affiliateprog_html5_comment( $comment, $args, $depth ) {
 		</article><!-- .comment-body -->
 	<?php
 }
+
