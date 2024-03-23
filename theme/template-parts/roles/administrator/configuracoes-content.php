@@ -192,9 +192,9 @@
 						<div class="relative mr-[22px] ">
 							<img class="w-[80px] h-[80px] rounded" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0OMHEKM45qri2RzU_TfNJgVKzlEYLB_iwP18p4lN83w&s" alt="Large avatar">
 							<a href="#">
-					<span class="bg-red-500 shadow w-[28px] p-[5px] flex justify-center items-center font-medium text-white text-[7px] text-center leading-none border-[1px] border-white rounded-[21px] absolute translate-y-1/2 translate-x-1/2 left-auto bottom-0 right-0 shadow">
-						Inativo
-					</span>
+								<span class="bg-red-500 shadow w-[28px] p-[5px] flex justify-center items-center font-medium text-white text-[7px] text-center leading-none border-[1px] border-white rounded-[21px] absolute translate-y-1/2 translate-x-1/2 left-auto bottom-0 right-0 shadow">
+									Inativo
+								</span>
 							</a>
 						</div>
 						<div>

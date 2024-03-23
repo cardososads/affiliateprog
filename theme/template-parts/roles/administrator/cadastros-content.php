@@ -12,8 +12,6 @@
 			</div>
 		</div>
 	</div>
-
-
 	<div class="flex gap-[30px]">
 		<div class="flex flex-col w-1/2 rounded-lg bg-white p-6 my-8">
 			<h2 class="text-2xl font-semibold">Link de Afiliado</h2>
@@ -89,7 +87,6 @@
 			</div>
 		</div>
 	</div>
-
 	<div class="w-full rounded-[10px] bg-white p-[40px] my-[30px] overflow-y-scroll">
 		<h2 class="text-xl font-semibold">Link de Afiliado</h2>
 		<div>
