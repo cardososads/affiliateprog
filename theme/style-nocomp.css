@@ -1,3 +1,64 @@
 body{
 	overflow: hidden;
 }
+
+/* Estilo para o contêiner do formulário de login */
+#loginform {
+	max-width: 400px;
+	margin: 0 auto;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+/* Estilo para o formulário de login */
+#loginform form {
+	display: flex;
+	flex-direction: column;
+}
+
+/* Estilo para os rótulos dos campos de entrada */
+#loginform label {
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+#loginform p {
+	display: flex;
+	flex-direction: column;
+}
+/* Estilo para os campos de entrada */
+#loginform input[type="text"],
+#loginform input[type="password"] {
+	width: 300px;
+	padding: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
+/* Estilo para a caixa de seleção "Lembrar-me" */
+#loginform input[type="checkbox"] {
+	margin-right: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+
+}
+
+/* Estilo para o botão de envio do formulário */
+#loginform input[type="submit"] {
+	padding: 10px 20px;
+	background-color: #41837F;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+/* Estilo para os links "Perdeu a senha?" e "← Back to Your Site" */
+#loginform #nav,
+#loginform #backtoblog {
+	margin-top: 10px;
+}

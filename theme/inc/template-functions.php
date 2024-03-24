@@ -204,3 +204,30 @@ function affiliateprog_html5_comment( $comment, $args, $depth ) {
 		</article><!-- .comment-body -->
 	<?php
 }
+
+// Redireciona usuários não logados para a página de login personalizada
+function redirect_to_custom_login() {
+	if (!is_user_logged_in() && !is_page_template('login.php')) {
+		wp_redirect(home_url('/login/'));
+		exit();
+	}
+}
+add_action('template_redirect', 'redirect_to_custom_login');
+
+// Redireciona usuários após o login
+// Função para redirecionar usuários após o login
+function redirect_after_login($redirect_to, $requested_redirect_to, $user) {
+
+	$redirect_to = home_url();
+
+	return $redirect_to;
+}
+add_filter('login_redirect', 'redirect_after_login', 10, 3);
+
+
+// Redireciona usuários após o logout
+function redirect_after_logout() {
+	wp_redirect(home_url('/login/'));
+	exit();
+}
+add_action('wp_logout', 'redirect_after_logout');
