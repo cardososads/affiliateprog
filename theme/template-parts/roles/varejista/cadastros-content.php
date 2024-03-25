@@ -1,12 +1,25 @@
-<section>
+<section class="mt-5">
+	<div class="flex w-full gap-[30px]">
+		<div class="flex flex-col items-start w-full p-[40px] gap-[37px] rounded-[10px] border-[1px] border-[#F8F9FA] bg-white shadow">
+			<div class="flex items-center">
+				<div class="relative mr-[22px] ">
+					<img class="w-[80px] h-[80px] rounded" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0OMHEKM45qri2RzU_TfNJgVKzlEYLB_iwP18p4lN83w&s" alt="Large avatar">
+				</div>
+				<div>
+					<p class="text-[#2D3748] text-[18px] font-semibold">Nome Completo</p>
+					<span class="text-[#718096] text-[14px] font-normal leading-[21px]">email@email.com.br</span>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="flex gap-[30px]">
 		<div class="flex flex-col w-1/2 rounded-lg bg-white p-6 my-8">
-			<h2 class="text-2xl font-semibold mb-5">Link de Afiliado</h2>
+			<h2 class="text-2xl font-semibold">Link de Afiliado</h2>
 			<div class="flex flex-col gap-4">
-<!--				<form action="" class="flex gap-4 w-[80%]">-->
-<!--					<input class="rounded-lg border border-gray-300 px-4 py-2 flex-grow" type="text" placeholder="Insira seu link de afiliado aqui">-->
-<!--					<button class="px-4 py-2 bg-green-600 text-white rounded-lg" type="submit">Compartilhar link</button>-->
-<!--				</form>-->
+				<form action="" class="flex gap-4 w-[80%]">
+					<input class="rounded-lg border border-gray-300 px-4 py-2 flex-grow" type="text" placeholder="Insira seu link de afiliado aqui">
+					<button class="px-4 py-2 bg-green-600 text-white rounded-lg" type="submit">Compartilhar link</button>
+				</form>
 				<div class="p-6 bg-gray-100 flex flex-col gap-2 w-[90%] shadow rounded-lg">
 					<h3 class="text-2xl font-semibold mb-4">Convite via e-mail</h3>
 					<form action="" class="flex flex-col gap-4">
@@ -14,20 +27,16 @@
 							<label for="email">E-mail</label>
 							<input class="rounded-lg border border-gray-300 px-4 py-2" type="email" name="email" placeholder="E-mail">
 						</div>
-<!--						<div class="flex flex-col">-->
-<!--							<label for="empresa">Empresa</label>-->
-<!--							<input class="rounded-lg border border-gray-300 px-4 py-2" type="text" name="empresa" placeholder="Nome da empresa">-->
-<!--						</div>-->
 						<div class="flex flex-col">
-							<label for="cnpj">CNPJ</label>
-							<input class="rounded-lg border border-gray-300 px-4 py-2" type="text" name="cnpj" placeholder="CNPJ">
+							<label for="empresa">Empresa</label>
+							<input class="rounded-lg border border-gray-300 px-4 py-2" type="text" name="empresa" placeholder="Nome da empresa">
 						</div>
 						<button class="px-[30px] py-[10px] bg-green-600 text-white rounded-lg self-end" type="submit">Convidar</button>
 					</form>
 				</div>
 			</div>
 		</div>
-		<div class="w-1/2 h-full">
+		<div class="w-[50%]">
 			<div class="w-full rounded-[10px] bg-white p-[40px] my-[30px]">
 				<h2 class="text-xl font-semibold">Meta Mensal</h2>
 				<div >
@@ -78,48 +87,38 @@
 			</div>
 		</div>
 	</div>
-	<?php require 'edit-user-content.php'; ?>
+	<div class="w-full rounded-[10px] bg-white p-[40px] my-[30px] overflow-y-scroll">
+		<h2 class="text-xl font-semibold">Link de Afiliado</h2>
+		<div>
+			<form action="">
+				<input class="rounded-lg" type="text">
+				<button type="submit">Compartilhar link</button>
+			</form>
+			<h3>Convite via e-mail</h3>
+			<form class="flex flex-col" action="">
+				<label for="email">E-mail</label>
+				<input class="rounded-lg" type="email" name="email" placeholder="E-mail">
+				<div class="h-[20px]"></div>
+				<label for="empresa">Empresa</label>
+				<input class="rounded-lg" type="text" name="empresa" placeholder="Nome da empresa">
+				<div class="self-end">
+					<button type="submit">Convidar</button>
+				</div>
+			</form>
+		</div>
+	</div>
 	<div class="w-full rounded-[10px] bg-white p-[40px] my-[30px]">
 		<h2 class="text-gray-700 text-[25px] font-semibold leading-[35px] pb-[20px]">Lista de Aprovações</h2>
 		<div class="flex gap-[50px] mb-8">
-			<button class="px-[30px] py-[10px] text-xl bg-verde text-white shadow-button shadow-neutral-800 rounded-3xl">
+			<button class="px-[30px] py-[10px] text-xl shadow-button shadow-neutral-800 rounded-3xl">
 				Aprovados
 			</button>
-			<button class="px-[30px] py-[10px] text-xl bg-verde text-white shadow-button shadow-neutral-800 rounded-3xl">
+			<button class="px-[30px] py-[10px] text-xl shadow-button shadow-neutral-800 rounded-3xl">
 				Pendentes
 			</button>
-			<button class="px-[30px] py-[10px] text-xl bg-verde text-white shadow-button sha shadow-neutral-800 rounded-3xl">
+			<button class="px-[30px] py-[10px] text-xl shadow-button sha shadow-neutral-800 rounded-3xl">
 				Reprovados
 			</button>
-			<button data-modal-target="edit-infos" data-modal-toggle="edit-infos" class="px-[30px] py-[10px] text-xl bg-verde text-white shadow-button sha shadow-neutral-800 rounded-3xl">
-				Novo Cadastro
-			</button>
-
-			<div id="edit-infos" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-				<div class="relative p-4 w-full max-w-2xl max-h-full">
-					<!-- Modal content -->
-					<div class="relative mt-[70px] bg-white rounded-lg shadow dark:bg-gray-700 max-h-[690px] overflow-y-scroll">
-						<!-- Modal header -->
-						<div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-							<h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-								Adicionar Usuário
-							</h3>
-							<button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="edit-infos">
-								<svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-									<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-								</svg>
-								<span class="sr-only">Close modal</span>
-							</button>
-						</div>
-						<!-- Modal body -->
-						<!-- Modal footer -->
-						<div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-							<button data-modal-hide="edit-infos" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I accept</button>
-							<button data-modal-hide="edit-infos" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
-						</div>
-					</div>
-				</div>
-			</div>
 		</div>
 		<div class="flex gap-[40px]">
 			<div class="w-[50%] px-[50px] py-[20px] bg-[#f1f1f1] rounded-[10px] shadow">

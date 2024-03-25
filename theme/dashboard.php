@@ -35,12 +35,12 @@ get_header();
 						<?php foreach ($contents as $key => $content) : ?>
 							<li>
 								<?php if ($key === $view) : ?>
-									<a href="<?php echo esc_url(add_query_arg('content', $key, get_permalink())); ?>" class="flex items-center rounded-3xl bg-slate-200 p-4">
+									<a href="<?php echo esc_url(add_query_arg('content', $key, get_permalink())); ?>" class="flex items-center rounded-3xl bg-slate-200 p-4 gap-2">
 										<?php echo $content['icon']; ?>
 										<?php echo $content['title']; ?>
 									</a>
 								<?php else: ?>
-									<a href="<?php echo esc_url(add_query_arg('content', $key, get_permalink())); ?>" class="flex items-center p-4">
+									<a href="<?php echo esc_url(add_query_arg('content', $key, get_permalink())); ?>" class="flex items-center p-4 gap-2">
 										<?php echo $content['icon']; ?>
 										<?php echo $content['title']; ?>
 									</a>
