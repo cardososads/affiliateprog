@@ -79,6 +79,27 @@
 		</div>
 	</div>
 	<?php require 'edit-user-content.php'; ?>
+	<script>
+		jQuery(document).ready(function($) {
+			$('#editUserForm').on('submit', function(e) {
+				e.preventDefault();
+
+				var formData = $(this).serialize();
+				var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
+
+				$.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: {
+						action: 'editar_usuario',
+						formData: formData
+					},
+					success: function(response) {
+					}
+				});
+			});
+		});
+	</script>
 	<div class="w-full rounded-[10px] bg-white p-[40px] my-[30px]">
 		<h2 class="text-gray-700 text-[25px] font-semibold leading-[35px] pb-[20px]">Lista de Aprovações</h2>
 		<div class="flex gap-[50px] mb-8">

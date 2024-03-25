@@ -88,6 +88,56 @@ if (current_user_can('administrator')) {
 
 		<button type="submit" name="submit" class="bg-blue-500 text-white rounded px-4 py-2">Cadastrar</button>
 	</form>
+	<script>
+		jQuery(document).ready(function($) {
+			$('#editUserForm').on('submit', function(e) {
+				e.preventDefault();
+
+				// Serializa o formulário apenas se o formulário não estiver vazio
+				var formData = $(this).serialize();
+				if (!formData) {
+					console.error("O formulário está vazio.");
+					return; // Aborta a submissão se o formulário estiver vazio
+				}
+
+				var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
+
+				$.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: {
+						action: 'editar_usuario',
+						formData: formData
+					},
+					success: function(response) {
+						// Lidar com a resposta do servidor, se necessário
+					},
+					error: function(xhr, status, error) {
+						console.error("Ocorreu um erro na requisição AJAX:", error);
+					}
+				});
+			});
+		});
+
+		// Verifica se data não é null e se data.languages está presente antes de desestruturar
+		if (data && data.languages) {
+			// Desestrutura a propriedade languages
+			const { languages } = data;
+
+			// Agora você pode usar a variável languages normalmente
+			// Fazer qualquer operação necessária com a variável languages
+			// Por exemplo:
+			languages.forEach(language => {
+				console.log(language);
+				// Fazer algo com cada linguagem
+			});
+		} else {
+			// Lidar com o caso em que data ou data.languages é null
+			console.error("A propriedade 'languages' é nula ou não está presente.");
+		}
+
+	</script>
+
 	<?php
 } else {
 	echo 'Você não tem permissão para acessar esta página.';
