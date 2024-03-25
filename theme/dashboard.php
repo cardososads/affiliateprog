@@ -16,7 +16,7 @@ get_header();
 
 <div class="flex w-full h-screen">
 	<!-- SIDEBAR -->
-<aside id="sidebar" class="absolute md:relative top-0 left-0 z-40 sm:z-0 flex flex-col flex-shrink-0 sm:visible w-64 h-screen pt-16 font-normal duration-75 lg:flex transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+<aside id="sidebar" class="absolute md:relative top-0 left-0 z-40 sm:z-0 flex flex-col flex-shrink-0 sm:visible w-64 h-screen pt-14 font-normal duration-75 lg:flex transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
 		<div class="relative flex flex-col flex-1 min-h-0 pt-0 bg-verde-10% border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
 			<div class="flex flex-col flex-1 pt-5 pb-4 overflow-y-auto">
 				<div class="flex-1 px-3 space-y-1 divide-y divide-gray-200 dark:divide-gray-700">
@@ -35,12 +35,12 @@ get_header();
 						<?php foreach ($contents as $key => $content) : ?>
 							<li>
 								<?php if ($key === $view) : ?>
-									<a href="<?php echo esc_url(add_query_arg('content', $key, get_permalink())); ?>" class="flex items-center rounded-3xl bg-slate-200 p-4">
+									<a href="<?php echo esc_url(add_query_arg('content', $key, get_permalink())); ?>" class="flex items-center rounded-3xl bg-slate-200 p-4 gap-2">
 										<?php echo $content['icon']; ?>
 										<?php echo $content['title']; ?>
 									</a>
 								<?php else: ?>
-									<a href="<?php echo esc_url(add_query_arg('content', $key, get_permalink())); ?>" class="flex items-center p-4">
+									<a href="<?php echo esc_url(add_query_arg('content', $key, get_permalink())); ?>" class="flex items-center p-4 gap-2">
 										<?php echo $content['icon']; ?>
 										<?php echo $content['title']; ?>
 									</a>
@@ -165,9 +165,11 @@ get_header();
 					get_template_part("template-parts/roles/$cargo/$view", 'content');
 				} else {
 					// Se o template não for encontrado, exibir uma mensagem de erro ou redirecionar para uma página padrão
-					echo 'Erro: Página não encontrada.';
+					get_template_part("template-parts/roles/$cargo/dashboard", 'content');
 				}
+
 				?>
+
 			</div>
 		</div>
 		<?php get_template_part( 'template-parts/layout/footer', 'content' ); ?>
