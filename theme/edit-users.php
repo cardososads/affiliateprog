@@ -1,5 +1,4 @@
 <?php
-// Verifica se os dados do formulário foram enviados e se a ação é editar_usuario
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == 'editar_usuario') {
 
 	// Verifica se o nonce é válido
@@ -10,6 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
 
 		// Por exemplo, para atualizar os metadados do usuário
 		$user_id = $_POST['user_id'];
+// Verifica se os dados do formulário foram enviados e se a ação é editar_usuario
 		$campos_personalizados = get_campos_personalizados_usuario();
 		foreach ($campos_personalizados as $campo => $label) {
 			if (isset($_POST[$campo])) {

