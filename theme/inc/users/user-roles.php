@@ -187,3 +187,5 @@ function add_new_user() {
 }
 add_action('wp_ajax_add_new_user', 'add_new_user');
 add_action('wp_ajax_nopriv_add_new_user', 'add_new_user');
+
+

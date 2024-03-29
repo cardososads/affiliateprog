@@ -246,3 +246,33 @@ function enqueue_chart_js() {
 add_action('wp_enqueue_scripts', 'enqueue_chart_js');
 
 
+// Função para criar a tabela no ativação do plugin ou do tema
+function criar_tabela_historico_metas() {
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'historico_metas';
+	$wpdb_collate = $wpdb->collate;
+
+	$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        user_id mediumint(9) NOT NULL,
+        cnpj varchar(255) NOT NULL,
+        meta_filtro decimal(10,2) NOT NULL,
+        atingido_filtro decimal(10,2) NOT NULL,
+        meta_oleo decimal(10,2) NOT NULL,
+        atingido_oleo decimal(10,2) NOT NULL,
+        meta_cabine decimal(10,2) NOT NULL,
+        atingido_cabine decimal(10,2) NOT NULL,
+        meta_combustivel decimal(10,2) NOT NULL,
+        atingido_combustivel decimal(10,2) NOT NULL,
+        meta_ar decimal(10,2) NOT NULL,
+        atingido_ar decimal(10,2) NOT NULL,
+        data_registro datetime NOT NULL,
+        PRIMARY KEY  (id)
+    );";
+
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	dbDelta( $sql );
+}
+
+// Registra a função para ser executada na ativação do plugin ou do tema
+add_action( 'init', 'criar_tabela_historico_metas' );
