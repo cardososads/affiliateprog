@@ -1,5 +1,20 @@
 <?php
 
+// Adicionar tipos de usuário personalizados
+function adicionar_tipos_de_usuario() {
+	add_role('varejista', __('Varejista'), array(
+		'read' => true, // Permissões básicas para leitura
+		// Adicione outras permissões necessárias para os varejistas
+	));
+
+	add_role('oficina', __('Oficina'), array(
+		'read' => true, // Permissões básicas para leitura
+		// Adicione outras permissões necessárias para as oficinas
+	));
+}
+add_action('init', 'adicionar_tipos_de_usuario');
+
+
 // Adicionar campos personalizados aos perfis de usuário
 function adicionar_campos_personalizados_usuario($user_contactmethods) {
 	$campos_personalizados = array(
