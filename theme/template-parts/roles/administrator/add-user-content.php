@@ -49,6 +49,7 @@
 												success: function(response) {
 													$('#message').html(response);
 												}
+												// location.reload();
 											});
 										});
 									});

@@ -1,9 +1,23 @@
 <?php
 
+// Adicionar tipos de usuário personalizados
+function adicionar_tipos_de_usuario() {
+	add_role('varejista', __('Varejista'), array(
+		'read' => true, // Permissões básicas para leitura
+		// Adicione outras permissões necessárias para os varejistas
+	));
+
+	add_role('oficina', __('Oficina'), array(
+		'read' => true, // Permissões básicas para leitura
+		// Adicione outras permissões necessárias para as oficinas
+	));
+}
+add_action('init', 'adicionar_tipos_de_usuario');
+
+
 // Adicionar campos personalizados aos perfis de usuário
 function adicionar_campos_personalizados_usuario($user_contactmethods) {
 	$campos_personalizados = array(
-		'profile_picture' => 'Foto de Perfil',
 		'razao_social' => 'Razão Social',
 		'nome_fantasia' => 'Nome Fantasia',
 		'cnpj' => 'CNPJ',
@@ -31,7 +45,6 @@ add_filter('user_contactmethods', 'adicionar_campos_personalizados_usuario');
 // Carregar e salvar campos personalizados do usuário
 function carregar_e_salvar_campos_personalizados_usuario() {
 	$campos_personalizados = array(
-		'profile_picture',
 		'razao_social',
 		'nome_fantasia',
 		'cnpj',
@@ -74,7 +87,6 @@ add_action('wp_ajax_nopriv_carregar_dados_usuario', 'carregar_e_salvar_campos_pe
 
 function get_campos_personalizados_usuario() {
 	return array(
-		'profile_picture' => 'Foto de Perfil',
 		'razao_social' => 'Razão Social',
 		'nome_fantasia' => 'Nome Fantasia',
 		'cnpj' => 'CNPJ',
@@ -108,7 +120,6 @@ function editar_usuario_callback() {
 
 	// Lista de campos a serem atualizados
 	$campos = array(
-		'profile_picture',
 		'razao_social',
 		'nome_fantasia',
 		'cnpj',

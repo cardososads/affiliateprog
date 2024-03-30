@@ -254,7 +254,6 @@ function criar_tabela_historico_metas() {
 
 	$sql = "CREATE TABLE IF NOT EXISTS $table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
-        user_id mediumint(9) NOT NULL,
         cnpj varchar(255) NOT NULL,
         meta_filtro decimal(10,2) NOT NULL,
         atingido_filtro decimal(10,2) NOT NULL,

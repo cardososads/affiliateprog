@@ -123,6 +123,7 @@ $users = get_users(array('role__in' => array('varejista', 'oficina')));
 														success: function (response) {
 															// Manipular a resposta do servidor
 															console.log(response);
+															location.reload();
 														},
 														error: function (xhr, status, error) {
 															// Manipular erros, se houver
