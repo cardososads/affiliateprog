@@ -340,7 +340,7 @@ function send_invite_email() {
 			$cadastro_link = esc_url(add_query_arg('codigo_invite', $codigo_invite, site_url('/cadastro-oficina')));
 
 			// Endereço de e-mail do administrador do site
-			$to = get_option('admin_email');
+			$to = $user_email;
 
 			// Assunto do e-mail
 			$subject = 'Convite para Oficina';
