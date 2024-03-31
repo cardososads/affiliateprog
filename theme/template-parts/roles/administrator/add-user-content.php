@@ -52,11 +52,16 @@
 												data: formData + '&action=add_new_user',
 												success: function(response) {
 													$('#message').html(response);
+													// Recarregar a página após 1 segundo
+													setTimeout(function() {
+														location.reload();
+													}, 1000);
 												},
 												error: function(xhr, status, error) {
 													console.error(xhr.responseText);
 												}
 											});
+
 										});
 									});
 								</script>
