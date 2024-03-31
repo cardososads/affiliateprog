@@ -1,4 +1,4 @@
-<button data-modal-target="edit-infos" data-modal-toggle="edit-infos" class="px-[30px] py-[10px] mt-5 text-xl bg-verde text-white shadow-button sha shadow-neutral-800 rounded-3xl">
+<button data-modal-target="edit-infos" data-modal-toggle="edit-infos" class="px-[30px] py-[10px] mb-5 text-xl bg-verde text-white shadow sha shadow-neutral-800 rounded-3xl">
 	Novo Cadastro
 </button>
 
@@ -56,6 +56,7 @@
 												error: function(xhr, status, error) {
 													console.error(xhr.responseText);
 												}
+												location.reload();
 											});
 										});
 									});
