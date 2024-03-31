@@ -18,7 +18,6 @@ add_action('init', 'adicionar_tipos_de_usuario');
 // Adicionar campos personalizados aos perfis de usuário
 function adicionar_campos_personalizados_usuario($user_contactmethods) {
 	$campos_personalizados = array(
-		'profile_picture' => 'Foto de Perfil',
 		'razao_social' => 'Razão Social',
 		'nome_fantasia' => 'Nome Fantasia',
 		'cnpj' => 'CNPJ',
@@ -32,7 +31,8 @@ function adicionar_campos_personalizados_usuario($user_contactmethods) {
 		'celular' => 'Celular',
 		'email' => 'Email',
 		'email_financeiro' => 'Email Financeiro',
-		'email_danfe_xml' => 'Email DANFE/XML'
+		'email_danfe_xml' => 'Email DANFE/XML',
+		'codigo_invite' => 'Código de Convite' // Adicionar campo de código de convite
 	);
 
 	foreach ($campos_personalizados as $campo => $label) {
@@ -43,10 +43,28 @@ function adicionar_campos_personalizados_usuario($user_contactmethods) {
 }
 add_filter('user_contactmethods', 'adicionar_campos_personalizados_usuario');
 
+// Função para gerar o código de convite para os varejistas
+function gerar_codigo_convite_varejista($user_id) {
+	$codigo_convite = 'vrj' . str_pad($user_id, 7, '0', STR_PAD_LEFT); // Formato: vrj0000001
+	update_user_meta($user_id, 'codigo_invite', $codigo_convite);
+}
+
+// Função para validar e associar a oficina ao varejista através do código de convite
+function associar_oficina_ao_varejista($user_id, $codigo_convite) {
+	// Verificar se o código de convite é válido
+	$varejista_id = get_user_by('meta_value', 'codigo_invite', $codigo_convite);
+	if ($varejista_id) {
+		// Associar a oficina ao varejista
+		update_user_meta($user_id, 'varejista_associado', $varejista_id);
+		return true;
+	} else {
+		return false; // Código de convite inválido
+	}
+}
+
 // Carregar e salvar campos personalizados do usuário
 function carregar_e_salvar_campos_personalizados_usuario() {
 	$campos_personalizados = array(
-		'profile_picture',
 		'razao_social',
 		'nome_fantasia',
 		'cnpj',
@@ -60,7 +78,8 @@ function carregar_e_salvar_campos_personalizados_usuario() {
 		'celular',
 		'email',
 		'email_financeiro',
-		'email_danfe_xml'
+		'email_danfe_xml',
+		'codigo_invite' // Adicionar o campo 'codigo_invite' à lista de campos personalizados
 	);
 
 	if (isset($_POST['action']) && $_POST['action'] === 'salvar_dados_usuario') {
@@ -84,12 +103,10 @@ function carregar_e_salvar_campos_personalizados_usuario() {
 }
 add_action('wp_ajax_salvar_dados_usuario', 'carregar_e_salvar_campos_personalizados_usuario');
 add_action('wp_ajax_nopriv_salvar_dados_usuario', 'carregar_e_salvar_campos_personalizados_usuario');
-add_action('wp_ajax_carregar_dados_usuario', 'carregar_e_salvar_campos_personalizados_usuario');
-add_action('wp_ajax_nopriv_carregar_dados_usuario', 'carregar_e_salvar_campos_personalizados_usuario');
 
+// Função para obter os campos personalizados do usuário
 function get_campos_personalizados_usuario() {
-	return array(
-		'profile_picture' => 'Foto de Perfil',
+	$campos_personalizados = array(
 		'razao_social' => 'Razão Social',
 		'nome_fantasia' => 'Nome Fantasia',
 		'cnpj' => 'CNPJ',
@@ -103,8 +120,10 @@ function get_campos_personalizados_usuario() {
 		'celular' => 'Celular',
 		'email' => 'Email',
 		'email_financeiro' => 'Email Financeiro',
-		'email_danfe_xml' => 'Email DANFE/XML'
+		'email_danfe_xml' => 'Email DANFE/XML',
+		'codigo_invite' => 'Código de Convite' // Adicionar campo de código de convite
 	);
+	return $campos_personalizados;
 }
 
 add_action('wp_ajax_editar_usuario', 'editar_usuario_callback');
@@ -123,7 +142,6 @@ function editar_usuario_callback() {
 
 	// Lista de campos a serem atualizados
 	$campos = array(
-		'profile_picture',
 		'razao_social',
 		'nome_fantasia',
 		'cnpj',
@@ -176,7 +194,6 @@ function editar_usuario_callback() {
 }
 
 function add_user_script() {
-	wp_enqueue_script('add-user-script', get_template_directory_uri() . '/js/add-user-script.js', array('jquery'), '', true);
 	wp_localize_script('add-user-script', 'add_user_ajax', array('ajax_url' => admin_url('admin-ajax.php')));
 }
 add_action('wp_enqueue_scripts', 'add_user_script');
@@ -193,6 +210,12 @@ function add_new_user() {
 	if (!is_wp_error($user_id)) {
 		$user = new WP_User($user_id);
 		$user->set_role($role);
+
+		// Se o usuário criado for um varejista, gere o código de convite
+		if ($role == 'varejista') {
+			gerar_codigo_convite_varejista($user_id);
+		}
+
 		echo 'Usuário adicionado com sucesso!';
 	} else {
 		echo 'Erro ao adicionar usuário: ' . $user_id->get_error_message();
@@ -202,3 +225,27 @@ function add_new_user() {
 }
 add_action('wp_ajax_add_new_user', 'add_new_user');
 add_action('wp_ajax_nopriv_add_new_user', 'add_new_user');
+
+// Verificar e gerar códigos de convite para varejistas que não possuem
+function verificar_e_gerar_codigos_convite() {
+	// Obtém todos os usuários com o papel 'varejista'
+	$usuarios_varejistas = get_users(array(
+		'role' => 'varejista',
+		'meta_query' => array(
+			array(
+				'key' => 'codigo_invite',
+				'compare' => 'NOT EXISTS', // Verifica se o campo 'codigo_invite' não existe
+			),
+		),
+	));
+
+	// Se houver varejistas sem código de convite, gere para eles
+	foreach ($usuarios_varejistas as $usuario) {
+		$user_id = $usuario->ID;
+		gerar_codigo_convite_varejista($user_id);
+	}
+}
+
+// Adicionar a verificação na inicialização do tema
+add_action('init', 'verificar_e_gerar_codigos_convite');
+

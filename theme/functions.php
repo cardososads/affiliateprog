@@ -246,3 +246,130 @@ function enqueue_chart_js() {
 add_action('wp_enqueue_scripts', 'enqueue_chart_js');
 
 
+// Função para criar a tabela no ativação do plugin ou do tema
+function criar_tabela_historico_metas() {
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'historico_metas';
+	$wpdb_collate = $wpdb->collate;
+
+	$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        cnpj varchar(255) NOT NULL,
+        meta_filtro decimal(10,2) NOT NULL,
+        atingido_filtro decimal(10,2) NOT NULL,
+        meta_oleo decimal(10,2) NOT NULL,
+        atingido_oleo decimal(10,2) NOT NULL,
+        meta_cabine decimal(10,2) NOT NULL,
+        atingido_cabine decimal(10,2) NOT NULL,
+        meta_combustivel decimal(10,2) NOT NULL,
+        atingido_combustivel decimal(10,2) NOT NULL,
+        meta_ar decimal(10,2) NOT NULL,
+        atingido_ar decimal(10,2) NOT NULL,
+        data_registro datetime NOT NULL,
+        PRIMARY KEY  (id)
+    );";
+
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	dbDelta( $sql );
+}
+
+// Registra a função para ser executada na ativação do plugin ou do tema
+add_action( 'init', 'criar_tabela_historico_metas' );
+
+
+add_action('wpcf7_before_send_mail', 'custom_validation', 10, 1);
+
+function custom_validation($contact_form) {
+	// Verifica se a validação já foi executada
+	if (session_id() === '') {
+		session_start();
+	}
+	if ($_SESSION['cnpj_validation_executed']) {
+		return;
+	}
+
+	$submission = WPCF7_Submission::get_instance();
+	if (!$submission) {
+		return;
+	}
+
+	$posted_data = $submission->get_posted_data();
+	$cnpj = $posted_data['cnpj'];
+
+	// Obtém todos os usuários
+	$users = get_users();
+
+	// Verifica se algum usuário possui o CNPJ fornecido
+	foreach ($users as $user) {
+		$user_cnpj = get_user_meta($user->ID, 'cnpj', true);
+		if ($user_cnpj == $cnpj) {
+			$contact_form->add_error('cnpj', 'CNPJ já está em uso. Por favor, escolha outro.');
+			$_SESSION['cnpj_validation_executed'] = true; // Marca a validação como executada
+
+			// Adiciona uma classe ao botão de envio para desativá-lo
+			echo "<script>document.addEventListener('DOMContentLoaded', function() { document.querySelector('.wpcf7-submit').setAttribute('disabled', 'disabled'); });</script>";
+			return;
+		}
+	}
+}
+
+add_action('admin_post_send_invite_email', 'send_invite_email');
+add_action('admin_post_nopriv_send_invite_email', 'send_invite_email');
+
+function send_invite_email() {
+	// Verifica se o nonce é válido
+	if (!isset($_POST['send_invite_email_nonce']) || !wp_verify_nonce($_POST['send_invite_email_nonce'], 'send_invite_email_nonce')) {
+		wp_die('Nonce inválido');
+	}
+
+	// Verifica se o email do usuário e o CNPJ foram fornecidos
+	if (isset($_POST['user_email']) && isset($_POST['cnpj'])) {
+		// Obtém os dados do formulário
+		$user_email = sanitize_email($_POST['user_email']);
+		$cnpj = sanitize_text_field($_POST['cnpj']);
+
+		// Verifica se há um usuário logado
+		if (is_user_logged_in()) {
+			// Obtém o ID do usuário atualmente logado
+			$user_id = get_current_user_id();
+
+			// Obtém o código de convite associado ao usuário atual
+			$codigo_invite = get_user_meta($user_id, 'codigo_invite', true);
+
+			// Link de cadastro com o código de convite
+			$cadastro_link = esc_url(add_query_arg('codigo_invite', $codigo_invite, site_url('/cadastro-oficina')));
+
+			// Endereço de e-mail do administrador do site
+			$to = get_option('admin_email');
+
+			// Assunto do e-mail
+			$subject = 'Convite para Oficina';
+
+			// Corpo do e-mail
+			$message = 'CNPJ do Usuário: ' . $cnpj . '<br>';
+			$message .= 'E-mail do Usuário: ' . $user_email . '<br>';
+			$message .= 'Link de Cadastro: <a href="' . $cadastro_link . '">' . $cadastro_link . '</a>';
+
+			// Cabeçalhos adicionais
+			$headers = array('Content-Type: text/html; charset=UTF-8');
+
+			// Envie o e-mail
+			$sent = wp_mail($to, $subject, $message, $headers);
+
+			// Verifique se o e-mail foi enviado com sucesso
+			if ($sent) {
+				echo 'E-mail enviado com sucesso para o administrador do site.';
+			} else {
+				echo 'Falha ao enviar o e-mail.';
+			}
+		} else {
+			echo 'Não foi possível enviar o convite. Por favor, faça login.';
+		}
+	} else {
+		echo 'Por favor, forneça um e-mail e um CNPJ.';
+	}
+
+	// Redireciona de volta para a página de onde o formulário foi enviado
+	wp_redirect($_SERVER['HTTP_REFERER']);
+	exit;
+}

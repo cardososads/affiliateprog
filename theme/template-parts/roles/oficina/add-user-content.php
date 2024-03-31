@@ -1,5 +1,5 @@
 <button data-modal-target="edit-infos" data-modal-toggle="edit-infos" class="px-[30px] py-[10px] mt-5 text-xl bg-verde text-white shadow-button sha shadow-neutral-800 rounded-3xl">
-	Novo Parceiro
+	Novo Cadastro
 </button>
 
 <div id="edit-infos" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -12,7 +12,7 @@
 					<div class="container mx-auto">
 						<div class="md:flex md:justify-center">
 							<div class="md:w-full">
-								<h2 class="text-2xl font-bold mb-4">Adicionar Novo Parceiro</h2>
+								<h2 class="text-2xl font-bold mb-4">Adicionar Novo Usuário</h2>
 								<form id="add-user-form" class="space-y-4">
 									<div>
 										<label for="username" class="block font-semibold">Nome de usuário:</label>
@@ -33,7 +33,7 @@
 											<option value="oficina">Oficina</option>
 										</select>
 									</div>
-									<button type="submit" class="bg-green-600 hover:bg-green-800 text-white px-4 py-2 rounded hover:bg-blue-600">Adicionar Parceiro</button>
+									<button type="submit" class="bg-green-600 hover:bg-green-800 text-white px-4 py-2 rounded hover:bg-blue-600">Adicionar Usuário</button>
 								</form>
 								<script>
 									jQuery(document).ready(function($) {

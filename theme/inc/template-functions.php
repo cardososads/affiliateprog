@@ -231,3 +231,66 @@ function redirect_after_logout() {
 	exit();
 }
 add_action('wp_logout', 'redirect_after_logout');
+
+
+// Registrando o tipo de post personalizado
+function registrar_planilhas_de_vendas() {
+	$labels = array(
+		'name'               => 'Planilhas de Vendas',
+		'singular_name'      => 'Planilha de Vendas',
+		'menu_name'          => 'Planilhas de Vendas',
+		'name_admin_bar'     => 'Planilha de Vendas',
+		'add_new'            => 'Adicionar Nova',
+		'add_new_item'       => 'Adicionar Nova Planilha de Vendas',
+		'new_item'           => 'Nova Planilha de Vendas',
+		'edit_item'          => 'Editar Planilha de Vendas',
+		'view_item'          => 'Ver Planilha de Vendas',
+		'all_items'          => 'Todas as Planilhas de Vendas',
+		'search_items'       => 'Buscar Planilhas de Vendas',
+		'parent_item_colon'  => 'Planilha de Vendas Pai:',
+		'not_found'          => 'Nenhuma planilha de vendas encontrada.',
+		'not_found_in_trash' => 'Nenhuma planilha de vendas encontrada na lixeira.'
+	);
+
+	$args = array(
+		'labels'             => $labels,
+		'public'             => true,
+		'publicly_queryable' => true,
+		'show_ui'            => true,
+		'show_in_menu'       => true,
+		'query_var'          => true,
+		'rewrite'            => array( 'slug' => 'planilhas-de-vendas' ),
+		'capability_type'    => 'post',
+		'has_archive'        => true,
+		'hierarchical'       => false,
+		'menu_position'      => null,
+		'supports'           => array( 'title') // Pode adicionar ou remover suportes conforme necessário
+	);
+
+	register_post_type( 'planilha_de_vendas', $args );
+}
+add_action( 'init', 'registrar_planilhas_de_vendas' );
+
+// Adicionando categorias ao tipo de post personalizado
+function adicionar_categorias_planilhas_de_vendas() {
+	register_taxonomy(
+		'categoria_planilha_de_vendas',
+		'planilha_de_vendas',
+		array(
+			'label' => 'Categorias de Planilhas de Vendas',
+			'rewrite' => array( 'slug' => 'categoria-planilha-de-vendas' ),
+			'hierarchical' => true,
+		)
+	);
+}
+add_action( 'init', 'adicionar_categorias_planilhas_de_vendas' );
+
+
+add_action('rest_api_init', function () {
+	register_rest_route('csv-upload/v1', '/upload', array(
+		'methods' => 'POST',
+		'callback' => 'handle_csv_upload',
+	));
+});
+
+
