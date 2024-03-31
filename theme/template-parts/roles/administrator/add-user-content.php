@@ -53,11 +53,9 @@
 												success: function(response) {
 													$('#message').html(response);
 												},
-												location.reload();
 												error: function(xhr, status, error) {
 													console.error(xhr.responseText);
 												}
-
 											});
 										});
 									});
