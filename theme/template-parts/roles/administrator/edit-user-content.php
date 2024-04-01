@@ -3,6 +3,35 @@ $users = get_users(array('role__in' => array('varejista', 'oficina')));
 ?>
 
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+	<!-- Adicione este código acima da tabela -->
+	<div class="flex items-center justify-end mb-4">
+		<label for="statusFilter" class="mr-2">Filtrar por Status:</label>
+		<select id="statusFilter" class="border border-gray-300 rounded px-3 py-2">
+			<option value="">Todos</option>
+			<option value="pendente">Pendente</option>
+			<option value="ativo">Ativo</option>
+			<option value="reprovado">Reprovado</option>
+			<option value="inativo">Inativo</option>
+		</select>
+	</div>
+
+	<!-- Aqui está o JavaScript que irá filtrar os resultados -->
+	<script>
+		jQuery(document).ready(function($) {
+			$('#statusFilter').on('change', function() {
+				var selectedStatus = $(this).val().toLowerCase();
+				$('tbody tr').each(function() {
+					var status = $(this).find('td:eq(4)').text().trim().toLowerCase();
+					if (selectedStatus === '' || status === selectedStatus) {
+						$(this).show();
+					} else {
+						$(this).hide();
+					}
+				});
+			});
+		});
+	</script>
+
 	<table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
 		<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
 		<tr>
