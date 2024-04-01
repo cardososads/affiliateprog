@@ -277,42 +277,6 @@ function criar_tabela_historico_metas() {
 add_action( 'init', 'criar_tabela_historico_metas' );
 
 
-add_action('wpcf7_before_send_mail', 'custom_validation', 10, 1);
-
-function custom_validation($contact_form) {
-	// Verifica se a validação já foi executada
-	if (session_id() === '') {
-		session_start();
-	}
-	if ($_SESSION['cnpj_validation_executed']) {
-		return;
-	}
-
-	$submission = WPCF7_Submission::get_instance();
-	if (!$submission) {
-		return;
-	}
-
-	$posted_data = $submission->get_posted_data();
-	$cnpj = $posted_data['cnpj'];
-
-	// Obtém todos os usuários
-	$users = get_users();
-
-	// Verifica se algum usuário possui o CNPJ fornecido
-	foreach ($users as $user) {
-		$user_cnpj = get_user_meta($user->ID, 'cnpj', true);
-		if ($user_cnpj == $cnpj) {
-			$contact_form->add_error('cnpj', 'CNPJ já está em uso. Por favor, escolha outro.');
-			$_SESSION['cnpj_validation_executed'] = true; // Marca a validação como executada
-
-			// Adiciona uma classe ao botão de envio para desativá-lo
-			echo "<script>document.addEventListener('DOMContentLoaded', function() { document.querySelector('.wpcf7-submit').setAttribute('disabled', 'disabled'); });</script>";
-			return;
-		}
-	}
-}
-
 add_action('admin_post_send_invite_email', 'send_invite_email');
 add_action('admin_post_nopriv_send_invite_email', 'send_invite_email');
 

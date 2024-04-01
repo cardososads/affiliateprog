@@ -30,10 +30,10 @@ function get_user_contents($cargo) {
 					'title' => 'Informações do Varejo',
 					'icon' => "<svg class='w-6 h-6 text-[#41837F]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='#41837F' viewBox='0 0 24 24'><path fill-rule='evenodd' d='M2 12a10 10 0 1 1 20 0 10 10 0 0 1-20 0Zm9.4-5.5a1 1 0 1 0 0 2 1 1 0 1 0 0-2ZM10 10a1 1 0 1 0 0 2h1v3h-1a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-1v-4c0-.6-.4-1-1-1h-2Z' clip-rule='evenodd'/></svg>"
 				],
-				'metas' => [
-					'title' => 'Metas',
-					'icon' => "<svg class='w-6 h-6 text-verde-inter' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='#41837F' viewBox='0 0 24 24'><path fill-rule='evenodd' d='M14 7h-4v3a1 1 0 1 1-2 0V7H6a1 1 0 0 0-1 1L4 19.7A2 2 0 0 0 6 22h12c1 0 2-1 2-2.2L19 8c0-.5-.5-.9-1-.9h-2v3a1 1 0 1 1-2 0V7Zm-2-3a2 2 0 0 0-2 2v1H8V6a4 4 0 1 1 8 0v1h-2V6a2 2 0 0 0-2-2Z' clip-rule='evenodd'/></svg>"
-				],
+//				'metas' => [
+//					'title' => 'Metas',
+//					'icon' => "<svg class='w-6 h-6 text-verde-inter' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='#41837F' viewBox='0 0 24 24'><path fill-rule='evenodd' d='M14 7h-4v3a1 1 0 1 1-2 0V7H6a1 1 0 0 0-1 1L4 19.7A2 2 0 0 0 6 22h12c1 0 2-1 2-2.2L19 8c0-.5-.5-.9-1-.9h-2v3a1 1 0 1 1-2 0V7Zm-2-3a2 2 0 0 0-2 2v1H8V6a4 4 0 1 1 8 0v1h-2V6a2 2 0 0 0-2-2Z' clip-rule='evenodd'/></svg>"
+//				],
 				'cadastros' => [
 					'title' => 'Cadastros',
 					'icon' => "<svg class='w-6 h-6 text-verde-inter' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='#41837F' viewBox='0 0 24 24'><path fill-rule='evenodd' d='M5 8a4 4 0 1 1 7.8 1.3l-2.5 2.5A4 4 0 0 1 5 8Zm4 5H7a4 4 0 0 0-4 4v1c0 1.1.9 2 2 2h2.2a3 3 0 0 1-.1-1.6l.6-3.4a3 3 0 0 1 .9-1.5L9 13Zm9-5a3 3 0 0 0-2 .9l-6 6a1 1 0 0 0-.3.5L9 18.8a1 1 0 0 0 1.2 1.2l3.4-.7c.2 0 .3-.1.5-.3l6-6a3 3 0 0 0-2-5Z' clip-rule='evenodd'/></svg>"

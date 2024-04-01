@@ -32,7 +32,8 @@ function adicionar_campos_personalizados_usuario($user_contactmethods) {
 		'email' => 'Email',
 		'email_financeiro' => 'Email Financeiro',
 		'email_danfe_xml' => 'Email DANFE/XML',
-		'codigo_invite' => 'Código de Convite' // Adicionar campo de código de convite
+		'codigo_invite' => 'Código de Convite',
+		'user_status' => 'Status'
 	);
 
 	foreach ($campos_personalizados as $campo => $label) {
@@ -79,7 +80,8 @@ function carregar_e_salvar_campos_personalizados_usuario() {
 		'email',
 		'email_financeiro',
 		'email_danfe_xml',
-		'codigo_invite' // Adicionar o campo 'codigo_invite' à lista de campos personalizados
+		'codigo_invite',
+		'user_status'
 	);
 
 	if (isset($_POST['action']) && $_POST['action'] === 'salvar_dados_usuario') {
@@ -121,7 +123,7 @@ function get_campos_personalizados_usuario() {
 		'email' => 'Email',
 		'email_financeiro' => 'Email Financeiro',
 		'email_danfe_xml' => 'Email DANFE/XML',
-		'codigo_invite' => 'Código de Convite' // Adicionar campo de código de convite
+		'codigo_invite' => 'Código de Convite',
 	);
 	return $campos_personalizados;
 }
@@ -155,7 +157,9 @@ function editar_usuario_callback() {
 		'celular',
 		'email',
 		'email_financeiro',
-		'email_danfe_xml'
+		'email_danfe_xml',
+		'codigo_invite',
+		'user_status'
 	);
 
 	// Verificar se o ID do usuário está presente nos dados do formulário
