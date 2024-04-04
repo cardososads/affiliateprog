@@ -7,13 +7,26 @@
 
 		<div class="flex flex-col w-1/2 rounded-lg bg-white p-6 my-8">
 			<script>
+				function copyTextToClipboard(text) {
+					var input = document.createElement('input');
+					input.setAttribute('value', text);
+					document.body.appendChild(input);
+
+					input.select();
+					input.setSelectionRange(0, 99999);
+
+					document.execCommand('copy');
+
+					document.body.removeChild(input);
+				}
+
 				function copyLink() {
-					var link = document.getElementById("affiliateLink");
-					link.select();
-					document.execCommand("copy");
-					alert("Link copied to  clipboard!");
+					var link = document.getElementById("affiliateLink").value;
+					copyTextToClipboard(link);
+					alert("Link copied to clipboard!");
 				}
 			</script>
+
 			<div class="flex items-center mb-5 gap-4">
 				<h2 class="text-2xl font-semibold">Link de Afiliado</h2>
 				<?php $affiliateLink = site_url('/cadastro-oficina') . '/?' . $codigo_invite; ?>
