@@ -234,7 +234,7 @@ require get_template_directory() . '/inc/users/user-menu-contents.php';
 require get_template_directory() . '/inc/users/user-roles.php';
 
 /* Disable WordPress Admin Bar for all users */
-//add_filter( 'show_admin_bar', '__return_false' );
+add_filter( 'show_admin_bar', '__return_false' );
 
 function enqueue_chart_js() {
 	// Registre a biblioteca Chart.js do CDN

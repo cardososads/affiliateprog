@@ -62,3 +62,8 @@ body{
 #loginform #backtoblog {
 	margin-top: 10px;
 }
+
+#contacts{
+	bottom: 100px;
+	left: 70px;
+}
