@@ -33,8 +33,10 @@ get_header();
 				?>
 				<a class="block mt-2 text-sm text-gray-600 hover:underline" href="<?php echo wp_lostpassword_url(); ?>">Esqueceu sua senha?</a>
 			</div>
-			<span class="mt-5">Ainda não é um afiliado?</span>
-			<button class="px-5 py-3 bg-verde rounded-lg"><a class="text-white font-semibold" href="">Cadastre-se aqui</a></button>
+			<span class="mt-5">Ainda não é um varejista?</span>
+			<?php
+				require 'add-user.php';
+			?>
 		</div>
 
 		<div>

@@ -20,10 +20,6 @@ function insert_csv_data_into_database($data) {
 			}
 		}
 
-		echo '<pre>';
-		print_r($row_data); // Exibe os dados antes da inserção
-		echo '</pre>';
-
 		// Insere a data e hora atual no campo data_registro
 		$row_data['data_registro'] = $data_registro;
 
@@ -62,12 +58,6 @@ if (isset($_POST['action']) && $_POST['action'] === 'process_csv_upload') {
 
 		// Recupera e exibe as colunas da tabela
 		$columns = get_table_columns($table_name);
-		echo "<p>Colunas da tabela $table_name:</p>";
-		echo "<ul>";
-		foreach ($columns as $column) {
-			echo "<li>{$column->Field}</li>";
-		}
-		echo "</ul>";
 
 		$csv_file = $_FILES['csv_file']['tmp_name'];
 
@@ -123,18 +113,21 @@ if (isset($_POST['action']) && $_POST['action'] === 'process_csv_upload') {
 			// Exibe os dados recuperados da tabela
 			$result = $wpdb->get_results("SELECT * FROM $table_name");
 			$total_rows = count($result);
-			echo "<p>Total de linhas inseridas: $total_rows</p>";
-			echo "<p>Dados recuperados da tabela após a inserção:</p>";
-			echo "<pre>";
-			print_r($result);
-			echo "</pre>";
+			echo "<p>Dados enviados com sucessoo!";
+			echo '<a href="javascript:history.back()" class="button">Voltar</a>';
+
 		} else {
 			echo "Erro ao abrir o arquivo CSV.";
+			echo '<a href="javascript:history.back()" class="button">Voltar</a>';
+
 		}
 	} else {
 		echo "Nenhum arquivo CSV foi enviado ou o arquivo não existe.";
+		echo '<a href="javascript:history.back()" class="button">Voltar</a>';
+
 	}
 } else {
 	echo "Ação inválida.";
+	echo '<a href="javascript:history.back()" class="button">Voltar</a>';
 }
 ?>

@@ -4,13 +4,14 @@
 ?>
 <section class="h-screen">
 	<div class="flex gap-[30px]">
+
 		<div class="flex flex-col w-1/2 rounded-lg bg-white p-6 my-8">
 			<script>
 				function copyLink() {
 					var link = document.getElementById("affiliateLink");
 					link.select();
 					document.execCommand("copy");
-					alert("Link copied to clipboard!");
+					alert("Link copied to  clipboard!");
 				}
 			</script>
 			<div class="flex items-center mb-5 gap-4">
@@ -39,10 +40,16 @@
 						</div>
 
 						<button type="submit"
-								class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+								class="bg-verde hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
 							Convidar
 						</button>
 					</form>
+					<?php if (isset($_GET['invite_email_success']) && $_GET['invite_email_success'] === 'true') : ?>
+						<div class="success-message">E-mail enviado com sucesso para o administrador do site.</div>
+					<?php elseif (isset($_GET['invite_email_error']) && $_GET['invite_email_error'] === 'true') : ?>
+						<div class="error-message">Falha ao enviar o e-mail.</div>
+					<?php endif; ?>
+
 				</div>
 			</div>
 		</div>

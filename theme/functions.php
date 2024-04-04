@@ -310,9 +310,14 @@ function send_invite_email() {
 			$subject = 'Convite para Oficina';
 
 			// Corpo do e-mail
-			$message = 'CNPJ do Usuário: ' . $cnpj . '<br>';
-			$message .= 'E-mail do Usuário: ' . $user_email . '<br>';
-			$message .= 'Link de Cadastro: <a href="' . $cadastro_link . '">' . $cadastro_link . '</a>';
+
+			$message = 'Olá,<br><br>';
+			$message .= 'Você está sendo convidado(a) para participar do Programa de Interação, onde sua oficina poderá se beneficiar de diversas oportunidades e recursos exclusivos.<br><br>';
+			$message .= 'Detalhes do convite:<br>';
+			$message .= '- Link de Cadastro: <a href="' . $cadastro_link . '">' . $cadastro_link . '</a><br><br>';
+			$message .= 'Esperamos contar com sua participação!<br><br>';
+			$message .= 'Atenciosamente,<br>';
+			$message .= 'Equipe do Programa de Interação';
 
 			// Cabeçalhos adicionais
 			$headers = array('Content-Type: text/html; charset=UTF-8');
@@ -320,20 +325,20 @@ function send_invite_email() {
 			// Envie o e-mail
 			$sent = wp_mail($to, $subject, $message, $headers);
 
-			// Verifique se o e-mail foi enviado com sucesso
+			// Adicione parâmetros de consulta para indicar sucesso ou erro
 			if ($sent) {
-				echo 'E-mail enviado com sucesso para o administrador do site.';
+				$redirect_url = add_query_arg('invite_email_success', 'true', $_SERVER['HTTP_REFERER']);
 			} else {
-				echo 'Falha ao enviar o e-mail.';
+				$redirect_url = add_query_arg('invite_email_error', 'true', $_SERVER['HTTP_REFERER']);
 			}
+
+			// Redirecione com os parâmetros de consulta
+			wp_safe_redirect($redirect_url);
+			exit;
 		} else {
-			echo 'Não foi possível enviar o convite. Por favor, faça login.';
+			wp_die('Não foi possível enviar o convite. Por favor, faça login.');
 		}
 	} else {
-		echo 'Por favor, forneça um e-mail e um CNPJ.';
+		wp_die('Por favor, forneça um e-mail e um CNPJ.');
 	}
-
-	// Redireciona de volta para a página de onde o formulário foi enviado
-	wp_redirect($_SERVER['HTTP_REFERER']);
-	exit;
 }

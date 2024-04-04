@@ -4,10 +4,16 @@
  */
 get_header();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
+// Verifica se o formulário foi submetido e os campos necessários estão definidos
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['codigo_invite'])) {
 	$username = $_POST['username'];
 	$email = $_POST['email'];
 	$password = $_POST['password'];
+	$cnpj = $_POST['cnpj'];
+	$codigo_invite = $_POST['codigo_invite'];
+
+	// Define o status do usuário como pendente
+	$user_status = 'pendente';
 
 	// Adicione o usuário com a função "Oficina"
 	$user_id = wp_create_user($username, $password, $email);
@@ -16,8 +22,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['username']) && isset($
 		$user = new WP_User($user_id);
 		$user->set_role('oficina');
 
-		// Redirecione para alguma página após o registro
-		wp_redirect(home_url('/'));
+		// Adicione o CNPJ como metadados do usuário
+		update_user_meta($user_id, 'cnpj', $cnpj);
+
+		// Adicione o código_invite como metadados do usuário
+		update_user_meta($user_id, 'codigo_invite', $codigo_invite);
+
+		// Defina o status do usuário como pendente
+		update_user_meta($user_id, 'user_status', $user_status);
+
+		// Redirecione para a página de login após o registro
+		wp_redirect(wp_login_url(add_query_arg('redirect_to', home_url('/dashboard'))));
 		exit;
 	} else {
 		// Exiba uma mensagem de erro se houver algum problema ao criar o usuário
@@ -25,7 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['username']) && isset($
 	}
 }
 ?>
-
 <section class="h-screen">
 	<div class="grid grid-cols-2">
 		<div class="bg-gray-100 flex flex-col items-center justify-center">
@@ -47,6 +61,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['username']) && isset($
 					<div>
 						<label for="cnpj" class="block font-semibold">CNPJ:</label>
 						<input type="text" id="cnpj" name="cnpj" class="w-full border rounded px-3 py-2" required>
+					</div>
+					<div>
+						<input type="hidden" id="codigo_invite" name="codigo_invite" class="w-full border rounded px-3 py-2" value="<?= $codigo_invite ?>" required>
 					</div>
 					<button type="submit" class="bg-green-600 hover:bg-green-800 text-white px-4 py-2 rounded hover:bg-blue-600">Adicionar Parceiro</button>
 				</form>

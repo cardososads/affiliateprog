@@ -201,34 +201,76 @@ function add_user_script() {
 	wp_localize_script('add-user-script', 'add_user_ajax', array('ajax_url' => admin_url('admin-ajax.php')));
 }
 add_action('wp_enqueue_scripts', 'add_user_script');
+//
+//
+//function add_new_user() {
+//	$username = $_POST['username'];
+//	$email = $_POST['email'];
+//	$password = $_POST['password'];
+//	$role = $_POST['role'];
+//
+//	$user_id = wp_create_user($username, $password, $email);
+//
+//	if (!is_wp_error($user_id)) {
+//		$user = new WP_User($user_id);
+//		$user->set_role($role);
+//
+//		// Se o usuário criado for um varejista, gere o código de convite
+//		if ($role == 'varejista') {
+//			gerar_codigo_convite_varejista($user_id);
+//		}
+//
+//		echo 'Usuário adicionado com sucesso!';
+//	} else {
+//		echo 'Erro ao adicionar usuário: ' . $user_id->get_error_message();
+//	}
+//
+//	die();
+//}
+//add_action('wp_ajax_add_new_user', 'add_new_user');
+//add_action('wp_ajax_nopriv_add_new_user', 'add_new_user');
 
+add_action('wp_ajax_add_new_user', 'add_new_user_callback');
+add_action('wp_ajax_nopriv_add_new_user', 'add_new_user_callback');
 
-function add_new_user() {
-	$username = $_POST['username'];
-	$email = $_POST['email'];
+function add_new_user_callback() {
+	$username = sanitize_user($_POST['username']);
+	$email = sanitize_email($_POST['email']);
 	$password = $_POST['password'];
 	$role = $_POST['role'];
+	$cnpj = sanitize_text_field($_POST['cnpj']);
+	$user_status = $_POST['user_status'];
+	var_dump($cnpj);
+	var_dump($cnpj);
+	// Verifica se todos os campos necessários estão presentes
+	if (!empty($username) && !empty($email) && !empty($password) && !empty($role) && !empty($cnpj) && !empty($user_status)) {
+		// Cria o novo usuário
+		$user_id = wp_create_user($username, $password, $email);
 
-	$user_id = wp_create_user($username, $password, $email);
+		// Verifica se o usuário foi criado com sucesso
+		if (!is_wp_error($user_id)) {
+			// Define o papel do usuário
+			$user = new WP_User($user_id);
+			$user->set_role($role);
 
-	if (!is_wp_error($user_id)) {
-		$user = new WP_User($user_id);
-		$user->set_role($role);
+			// Define o campo 'user_status' como 'pendente'
+			update_user_meta($user_id, 'user_status', $user_status);
 
-		// Se o usuário criado for um varejista, gere o código de convite
-		if ($role == 'varejista') {
-			gerar_codigo_convite_varejista($user_id);
+			// Salva o CNPJ do usuário
+			update_user_meta($user_id, 'cnpj', $cnpj);
+
+			// Redireciona para a página de sucesso
+		} else {
+			// Se houver um erro ao criar o usuário, retorna uma mensagem de erro
+			echo 'Erro ao criar usuário: ' . $user_id->get_error_message();
 		}
-
-		echo 'Usuário adicionado com sucesso!';
 	} else {
-		echo 'Erro ao adicionar usuário: ' . $user_id->get_error_message();
+		// Se algum campo estiver em branco, retorna uma mensagem de erro
+		echo 'Todos os campos são obrigatórios.';
 	}
 
-	die();
+	wp_die();
 }
-add_action('wp_ajax_add_new_user', 'add_new_user');
-add_action('wp_ajax_nopriv_add_new_user', 'add_new_user');
 
 // Verificar e gerar códigos de convite para varejistas que não possuem
 function verificar_e_gerar_codigos_convite() {
