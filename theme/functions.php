@@ -247,24 +247,24 @@ add_action('wp_enqueue_scripts', 'enqueue_chart_js');
 
 
 // Função para criar a tabela no ativação do plugin ou do tema
-function criar_tabela_historico_metas() {
+function criar_tabela_meta_filtros() {
 	global $wpdb;
-	$table_name = $wpdb->prefix . 'historico_metas';
+	$table_name = $wpdb->prefix . 'meta_filtros';
 	$wpdb_collate = $wpdb->collate;
 
 	$sql = "CREATE TABLE IF NOT EXISTS $table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         cnpj varchar(255) NOT NULL,
-        meta_filtro decimal(10,2) NOT NULL,
-        atingido_filtro decimal(10,2) NOT NULL,
-        meta_oleo decimal(10,2) NOT NULL,
-        atingido_oleo decimal(10,2) NOT NULL,
-        meta_cabine decimal(10,2) NOT NULL,
-        atingido_cabine decimal(10,2) NOT NULL,
-        meta_combustivel decimal(10,2) NOT NULL,
-        atingido_combustivel decimal(10,2) NOT NULL,
-        meta_ar decimal(10,2) NOT NULL,
-        atingido_ar decimal(10,2) NOT NULL,
+        meta_filtros decimal(10,2) NOT NULL,
+        atingido_filtros decimal(10,2) NOT NULL,
+        meta_filtro_de_oleo decimal(10,2) NOT NULL,
+        atingido_filtro_de_oleo decimal(10,2) NOT NULL,
+        meta_filtro_de_cabine decimal(10,2) NOT NULL,
+        atingido_filtro_de_cabine decimal(10,2) NOT NULL,
+        meta_filtro_de_combustivel decimal(10,2) NOT NULL,
+        atingido_filtro_de_combustivel decimal(10,2) NOT NULL,
+        meta_filtro_de_ar decimal(10,2) NOT NULL,
+        atingido_filtro_de_ar decimal(10,2) NOT NULL,
         data_registro datetime NOT NULL,
         PRIMARY KEY  (id)
     );";
@@ -272,44 +272,81 @@ function criar_tabela_historico_metas() {
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	dbDelta( $sql );
 }
+add_action( 'init', 'criar_tabela_meta_filtros' );
 
-// Registra a função para ser executada na ativação do plugin ou do tema
-add_action( 'init', 'criar_tabela_historico_metas' );
+function criar_tabela_meta_eletrica() {
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'meta_eletrica';
+	$wpdb_collate = $wpdb->collate;
+
+	$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        cnpj varchar(255) NOT NULL,
+        meta_alternador decimal(10,2) NOT NULL,
+        atingido_alternador decimal(10,2) NOT NULL,
+        meta_motor_de_partida decimal(10,2) NOT NULL,
+        atingido_motor_de_partida decimal(10,2) NOT NULL,
+        meta_componentes_eletricos decimal(10,2) NOT NULL,
+        atingido_componentes_eletricos decimal(10,2) NOT NULL,
+        data_registro datetime NOT NULL,
+        PRIMARY KEY  (id)
+    );";
+
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	dbDelta( $sql );
+}
+add_action( 'init', 'criar_tabela_meta_eletrica' );
+
+function criar_tabela_meta_freios() {
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'meta_freios';
+	$wpdb_collate = $wpdb->collate;
+
+	$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        cnpj varchar(255) NOT NULL,
+        meta_pastilha_de_friccao decimal(10,2) NOT NULL,
+        atingido_pastilha_de_friccao decimal(10,2) NOT NULL,
+		meta_de_fluido decimal(10,2) NOT NULL,
+        atingido_fluido decimal(10,2) NOT NULL,
+		meta_de_hidraulica decimal(10,2) NOT NULL,
+        atingido_hidraulica decimal(10,2) NOT NULL,
+		meta_de_cc_braking_systems decimal(10,2) NOT NULL,
+        atingido_cc_braking_systems decimal(10,2) NOT NULL,
+        data_registro datetime NOT NULL,
+        PRIMARY KEY  (id)
+    );";
+
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	dbDelta( $sql );
+}
+add_action( 'init', 'criar_tabela_meta_freios' );
+
 
 
 add_action('admin_post_send_invite_email', 'send_invite_email');
 add_action('admin_post_nopriv_send_invite_email', 'send_invite_email');
 
 function send_invite_email() {
-	// Verifica se o nonce é válido
 	if (!isset($_POST['send_invite_email_nonce']) || !wp_verify_nonce($_POST['send_invite_email_nonce'], 'send_invite_email_nonce')) {
 		wp_die('Nonce inválido');
 	}
 
-	// Verifica se o email do usuário e o CNPJ foram fornecidos
 	if (isset($_POST['user_email']) && isset($_POST['cnpj'])) {
-		// Obtém os dados do formulário
 		$user_email = sanitize_email($_POST['user_email']);
 		$cnpj = sanitize_text_field($_POST['cnpj']);
 
-		// Verifica se há um usuário logado
 		if (is_user_logged_in()) {
-			// Obtém o ID do usuário atualmente logado
 			$user_id = get_current_user_id();
 
-			// Obtém o código de convite associado ao usuário atual
 			$codigo_invite = get_user_meta($user_id, 'codigo_invite', true);
 
-			// Link de cadastro com o código de convite
 			$cadastro_link = esc_url(add_query_arg('codigo_invite', $codigo_invite, site_url('/cadastro-oficina')));
 
-			// Endereço de e-mail do administrador do site
 			$to = $user_email;
 
-			// Assunto do e-mail
 			$subject = 'Convite para Oficina';
 
-			// Corpo do e-mail
 
 			$message = 'Olá,<br><br>';
 			$message .= 'Você está sendo convidado(a) para participar do Programa de Interação, onde sua oficina poderá se beneficiar de diversas oportunidades e recursos exclusivos.<br><br>';
@@ -319,20 +356,16 @@ function send_invite_email() {
 			$message .= 'Atenciosamente,<br>';
 			$message .= 'Equipe do Programa de Interação';
 
-			// Cabeçalhos adicionais
 			$headers = array('Content-Type: text/html; charset=UTF-8');
 
-			// Envie o e-mail
 			$sent = wp_mail($to, $subject, $message, $headers);
 
-			// Adicione parâmetros de consulta para indicar sucesso ou erro
 			if ($sent) {
 				$redirect_url = add_query_arg('invite_email_success', 'true', $_SERVER['HTTP_REFERER']);
 			} else {
 				$redirect_url = add_query_arg('invite_email_error', 'true', $_SERVER['HTTP_REFERER']);
 			}
 
-			// Redirecione com os parâmetros de consulta
 			wp_safe_redirect($redirect_url);
 			exit;
 		} else {
@@ -341,4 +374,159 @@ function send_invite_email() {
 	} else {
 		wp_die('Por favor, forneça um e-mail e um CNPJ.');
 	}
+}
+
+function importar_csv_e_processar_upload($arquivo_tmp) {
+	global $dados_csv_processados;
+
+	$dados_csv_processados = array();
+
+	if (!is_uploaded_file($arquivo_tmp)) {
+		return false;
+	}
+
+	if (($handle = fopen($arquivo_tmp, "r")) !== false) {
+		$cabecalhos = fgetcsv($handle, 1000, ",");
+
+		$cabecalhos = array_map(function($cabecalho) {
+			$cabecalho = trim(preg_replace('/[^\w\s]/u', '', $cabecalho));
+			$cabecalho = str_replace(' ', '_', $cabecalho);
+			$cabecalho = remove_acentos($cabecalho);
+			$cabecalho = strtolower($cabecalho);
+			$cabecalho = preg_replace('/_+/', '_', $cabecalho);
+			return $cabecalho;
+		}, $cabecalhos);
+
+		while (($linha = fgetcsv($handle, 1000, ",")) !== false) {
+			$linha = array_map(function($valor) {
+				return preg_replace('/[^0-9]/', '', $valor);
+			}, $linha);
+
+			$linha_associativa = array_combine($cabecalhos, $linha);
+
+			$linha_processada = array_map('sanitize_text_field', $linha_associativa);
+
+			$dados_csv_processados[] = $linha_processada;
+		}
+		fclose($handle);
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function remove_acentos($string) {
+	return iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+}
+
+function verificar_compatibilidade_campos($dados, $nome_tabela) {
+	global $wpdb;
+
+	// Adiciona o prefixo da tabela, se necessário
+	$nome_tabela_com_prefixo = $wpdb->prefix . $nome_tabela;
+
+	// Verifica se a tabela existe no banco de dados
+	if (!tabela_existe($nome_tabela_com_prefixo)) {
+		echo "A tabela '$nome_tabela_com_prefixo' não existe no banco de dados. Não é possível continuar.";
+		return;
+	}
+
+	// Obtém a descrição dos campos na tabela
+	$desc_tabela = $wpdb->get_results("DESCRIBE $nome_tabela_com_prefixo");
+
+	// Verifica se ocorreu algum erro ao obter a descrição da tabela
+	if ($wpdb->last_error) {
+		echo "Erro ao obter a descrição da tabela: " . $wpdb->last_error;
+		return;
+	}
+
+	// Array para armazenar os nomes das colunas na tabela
+	$colunas_tabela = array();
+
+	// Extrai os nomes das colunas da descrição da tabela, ignorando 'id' e 'data_registro'
+	foreach ($desc_tabela as $coluna) {
+		if ($coluna->Field != 'id' && $coluna->Field != 'data_registro') {
+			$colunas_tabela[] = $coluna->Field;
+		}
+	}
+
+	// Variável para contar o número total de inserções bem-sucedidas
+	$total_insercoes = 0;
+
+	// Verifica se as colunas nos dados correspondem às colunas na tabela
+	foreach ($dados as $linha) {
+		// Array para armazenar os dados a serem inseridos
+		$dados_insercao = array();
+
+		// Itera sobre os valores da linha
+		foreach ($linha as $chave => $valor) {
+			// Ignora os campos 'cnpj' e 'data_registro', pois eles não precisam ser verificados
+			if ($chave == 'data_registro') {
+				continue;
+			}
+
+			// Verifica se o nome da coluna existe na tabela
+			if (in_array($chave, $colunas_tabela)) {
+				// Adiciona os dados à array de inserção
+				$dados_insercao[$chave] = $valor;
+			} else {
+				return;
+			}
+		}
+
+		// Adiciona a data de registro à array de inserção
+		$dados_insercao['data_registro'] = current_time('mysql');
+
+		// Insere os dados na tabela
+		$resultado = $wpdb->insert($nome_tabela_com_prefixo, $dados_insercao);
+
+		// Verifica se a inserção foi bem-sucedida
+		if ($resultado !== false) {
+			// Incrementa o total de inserções bem-sucedidas
+			$total_insercoes++;
+		}
+	}
+
+	// Exibe o total de inserções bem-sucedidas
+	echo "Total de linhas inseridas: $total_insercoes";
+}
+
+
+// Função para verificar se a tabela existe no banco de dados
+function tabela_existe($nome_tabela) {
+	global $wpdb; // Obtém a instância global do objeto do WordPress Database
+
+	// Verifica se a tabela existe no banco de dados
+	$resultado = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $nome_tabela));
+
+	// Retorna true se a tabela existe, false caso contrário
+	return $resultado !== null;
+}
+
+
+
+// Função para acessar os dados da tabela com filtros opcionais
+function meu_acesso_tabela($tabela, $filtros = array()) {
+	global $wpdb; // Obtém a instância global do objeto do WordPress Database
+
+	// Adiciona o prefixo da tabela do WordPress, se necessário
+	$nome_tabela = $wpdb->prefix . $tabela;
+
+	// Construindo a consulta SQL com base nos filtros
+	$sql = "SELECT * FROM $nome_tabela WHERE 1=1";
+	// Adiciona filtros à consulta, se fornecidos
+	if (!empty($filtros)) {
+		foreach ($filtros as $campo => $valor) {
+			$sql .= " AND $campo = '$valor'";
+		}
+	}
+
+	// Obtém os dados da tabela com base nos filtros aplicados
+	$resultados = $wpdb->get_results($sql);
+
+	// Verifica a compatibilidade dos campos antes de inserir os dados
+	verificar_compatibilidade_campos($resultados, $tabela);
+
+	// Retorna os resultados
+	return $resultados;
 }
