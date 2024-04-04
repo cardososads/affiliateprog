@@ -131,71 +131,58 @@ function get_campos_personalizados_usuario() {
 add_action('wp_ajax_editar_usuario', 'editar_usuario_callback');
 
 function editar_usuario_callback() {
-	// Verifique o nonce, valide os dados e verifique as permissões se necessário
+    // Verifique o nonce, valide os dados e verifique as permissões se necessário
 
-	$formData = $_POST; // Dados do formulário já estão no formato correto
+    $formData = $_POST; // Dados do formulário já estão no formato correto
 
-	// Mostrar os dados recebidos
-	echo "<strong>Dados Recebidos:</strong><br>";
-	foreach ($formData as $key => $value) {
-		echo "$key: $value<br>";
-	}
-	echo "<br>";
+    // Lista de campos a serem atualizados
+    $campos = array(
+        'razao_social',
+        'nome_fantasia',
+        'cnpj',
+        'inscricao_estadual',
+        'endereco',
+        'bairro',
+        'cidade',
+        'uf',
+        'cep',
+        'telefone',
+        'celular',
+        'email',
+        'email_financeiro',
+        'email_danfe_xml',
+        'codigo_invite',
+        'user_status'
+    );
 
-	// Lista de campos a serem atualizados
-	$campos = array(
-		'razao_social',
-		'nome_fantasia',
-		'cnpj',
-		'inscricao_estadual',
-		'endereco',
-		'bairro',
-		'cidade',
-		'uf',
-		'cep',
-		'telefone',
-		'celular',
-		'email',
-		'email_financeiro',
-		'email_danfe_xml',
-		'codigo_invite',
-		'user_status'
-	);
+    // Verificar se o ID do usuário está presente nos dados do formulário
+    if (!isset($formData['user_id'])) {
+        echo json_encode(array('error' => 'Dados de usuário não encontrados.'));
+        wp_die();
+    }
 
-	// Verificar se o ID do usuário está presente nos dados do formulário
-	if (!isset($formData['user_id'])) {
-		echo json_encode(array('error' => 'Dados de usuário não encontrados.'));
-		wp_die();
-	}
+    $user_id = $formData['user_id'];
+    $update_successful = false;
 
-	$user_id = $formData['user_id'];
-	$update_successful = false;
+    // Processar os dados do formulário e atualizar as informações do usuário
+    foreach ($campos as $campo) {
+        if (isset($formData[$campo])) {
+            $valor = $formData[$campo];
+            update_user_meta($user_id, $campo, $valor);
+            $update_successful = true; // Atualização bem-sucedida se ao menos um campo for atualizado
+        }
+    }
 
-	// Processar os dados do formulário e atualizar as informações do usuário
-	foreach ($campos as $campo) {
-		if (isset($formData[$campo])) {
-			$valor = $formData[$campo];
-			update_user_meta($user_id, $campo, $valor);
-			$update_successful = true; // Atualização bem-sucedida se ao menos um campo for atualizado
-		}
-	}
+    // Verificar se houve sucesso na atualização
+    if ($update_successful) {
+        echo json_encode(array('success' => 'Dados atualizados com sucesso.'));
+    } else {
+        echo json_encode(array('error' => 'Nenhum dado a ser atualizado.'));
+    }
 
-	// Mostrar os dados processados
-	echo "<strong>Dados Processados:</strong><br>";
-	foreach ($campos as $campo) {
-		$valor_atualizado = get_user_meta($user_id, $campo, true);
-		echo "$campo: $valor_atualizado<br>";
-	}
-
-	// Verificar se houve sucesso na atualização
-	if ($update_successful) {
-		echo json_encode(array('success' => 'Dados atualizados com sucesso.'));
-	} else {
-		echo json_encode(array('error' => 'Nenhum dado a ser atualizado.'));
-	}
-
-	wp_die();
+    wp_die();
 }
+
 
 function add_user_script() {
 	wp_localize_script('add-user-script', 'add_user_ajax', array('ajax_url' => admin_url('admin-ajax.php')));

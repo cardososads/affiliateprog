@@ -24,90 +24,9 @@ $user = get_current_user();
 							<li class="text-[#718096] text-[12px]"><strong>Empresa:</strong> Automotores S.A</li>
 						</ul>
 						<div class="w-[50%] flex justify-end items-end">
-							<button data-modal-target="edit-infos" data-modal-toggle="edit-infos" class="px-[20px] py-[10px] rounded-[5px] border-[1px] border-verde text-verde text-[10px]">
-								Editar Informações
-							</button>
-
-							<div id="edit-infos" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-								<div class="relative p-4 w-full max-w-2xl max-h-full">
-									<!-- Modal content -->
-									<div class="p-4 md:p-5 space-y-4 bg-white">
-										<!-- Formulário para edição de dados do usuário -->
-										<form id="user-edit-form" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-											<div>
-												<label for="username" class="block font-medium">Nome de Usuário:</label>
-												<input type="text" id="username" name="username" value="<?php echo esc_attr($user->user_login); ?>" disabled class="w-full border rounded-md px-3 py-2">
-												<!-- Outros campos personalizados -->
-												<?php
-												$campos_personalizados = get_campos_personalizados_usuario();
-												var_dump($user->ID);
-												foreach ($campos_personalizados as $campo => $label) :
-													?>
-													<label for="<?php echo $campo; ?>" class="block font-medium"><?php echo $label; ?>:</label>
-													<?php if ($campo === 'profile_picture') : ?>
-													<input type="file" id="<?php echo $campo; ?>" name="<?php echo $campo; ?>" accept="image/*" class="w-full border rounded-md px-3 py-2">
-												<?php else : ?>
-													<input type="text" id="<?php echo $campo; ?>" name="<?php echo $campo; ?>" class="w-full border rounded-md px-3 py-2">
-												<?php endif; ?>
-												<?php endforeach; ?>
-											</div>
-											<button type="submit" class="col-span-2 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">Salvar Alterações</button>
-										</form>
-
-									</div>
-									<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-									<script>
-										$(document).ready(function() {
-											// Função para carregar os dados do usuário no formulário
-											function carregarDadosUsuario() {
-												$.ajax({
-													url: '<?php echo admin_url('admin-ajax.php'); ?>',
-													type: 'POST',
-													data: {
-														action: 'carregar_dados_usuario'
-													},
-													success: function(response) {
-														var userData = JSON.parse(response);
-														$('#username').val(userData.username);
-														// Preencher os campos personalizados
-														<?php foreach ($campos_personalizados as $campo => $label) : ?>
-														$('#<?php echo $campo; ?>').val(userData.<?php echo $campo; ?>);
-														<?php endforeach; ?>
-													}
-												});
-											}
-
-											// Carregar os dados do usuário quando a página for carregada
-											carregarDadosUsuario();
-
-											// Função para lidar com a submissão do formulário de edição de usuário
-											$('#user-edit-form').submit(function(e) {
-												e.preventDefault(); // Impedir o envio padrão do formulário
-
-												// Serializar os dados do formulário
-												var formData = $(this).serialize();
-
-												// Enviar os dados via AJAX
-												$.ajax({
-													url: '<?php echo admin_url('admin-ajax.php'); ?>',
-													type: 'POST',
-													data: formData + '&action=salvar_dados_usuario',
-													success: function(response) {
-														// Lidar com a resposta após a submissão bem-sucedida
-														if (response.success) {
-															alert('Dados do usuário salvos com sucesso!');
-															// Você pode adicionar mais ações aqui, como redirecionar o usuário para outra página, atualizar a interface do usuário, etc.
-														} else {
-															alert('Erro ao salvar os dados do usuário. Por favor, tente novamente.');
-														}
-													}
-												});
-											});
-										});
-									</script>
-
-								</div>
-							</div>
+							<?php
+								require 'edit-user-content.php';
+							?>
 						</div>
 					</div>
 				</div>
