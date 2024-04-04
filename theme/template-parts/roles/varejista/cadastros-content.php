@@ -40,7 +40,7 @@
 						</div>
 
 						<button type="submit"
-								class="bg-verde hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+								class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
 							Convidar
 						</button>
 					</form>
