@@ -31,15 +31,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['username']) && isset($
 		// Defina o status do usuário como pendente
 		update_user_meta($user_id, 'user_status', $user_status);
 
-		// Redirecione para a página de login após o registro
-		wp_redirect(wp_login_url(add_query_arg('redirect_to', home_url('/dashboard'))));
-		exit;
+		// Exibir mensagem de sucesso
+		echo '<p class="text-green-600">Parceiro adicionado com sucesso!</p>';
 	} else {
 		// Exiba uma mensagem de erro se houver algum problema ao criar o usuário
-		echo 'Ocorreu um erro ao adicionar o usuário.';
+		echo '<p class="text-red-600">Ocorreu um erro ao adicionar o usuário.</p>';
 	}
 }
 ?>
+
 <section class="h-screen">
 	<div class="grid grid-cols-2">
 		<div class="bg-gray-100 flex flex-col items-center justify-center">
@@ -67,6 +67,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['username']) && isset($
 					</div>
 					<button type="submit" class="bg-green-600 hover:bg-green-800 text-white px-4 py-2 rounded hover:bg-blue-600">Adicionar Parceiro</button>
 				</form>
+				<?php
+				if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['codigo_invite'])) {
+					if (!is_wp_error($user_id)) {
+						echo '<p class="text-green-600">Parceiro adicionado com sucesso!</p>';
+					}
+				}
+				?>
 			</div>
 		</div>
 

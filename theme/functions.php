@@ -530,3 +530,173 @@ function meu_acesso_tabela($tabela, $filtros = array()) {
 	// Retorna os resultados
 	return $resultados;
 }
+
+// Função para retornar a quantidade de usuários cadastrados por mês
+function usuarios_cadastrados_por_mes() {
+	global $wpdb;
+
+	$results = $wpdb->get_results("
+        SELECT
+            YEAR(user_registered) AS year,
+            MONTH(user_registered) AS month,
+            COUNT(*) AS total_users
+        FROM
+            {$wpdb->prefix}users
+        GROUP BY
+            YEAR(user_registered),
+            MONTH(user_registered)
+    ");
+
+	$output = '<table>';
+
+	foreach ($results as $result) {
+		$output .= '<tr>';
+		$output .= '<td class="text-lg font-medium leading-6 text-gray-700">' . $result->total_users . '</td>';
+		$output .= '</tr>';
+	}
+
+	$output .= '</table>';
+
+	return $output;
+}
+add_shortcode('exibir_usuarios_cadastrados', 'usuarios_cadastrados_por_mes');
+
+// Função para retornar a quantidade de usuários ativos cadastrados por mês
+function usuarios_ativos_por_mes() {
+	global $wpdb;
+
+	$results = $wpdb->get_results("
+        SELECT
+            YEAR(u.user_registered) AS year,
+            MONTH(u.user_registered) AS month,
+            COUNT(*) AS total_users_ativos
+        FROM
+            {$wpdb->prefix}users u
+        JOIN
+            {$wpdb->prefix}usermeta um ON u.ID = um.user_id
+        WHERE
+            um.meta_key = 'user_status' AND um.meta_value = 'ativo'
+        GROUP BY
+            YEAR(u.user_registered),
+            MONTH(u.user_registered)
+    ");
+
+	$output = [];
+
+	foreach ($results as $result) {
+		$month_name = date("F", mktime(0, 0, 0, $result->month, 1));
+		$output[$result->year][$month_name] = $result->total_users_ativos;
+	}
+
+	return $output;
+}
+
+add_shortcode('exibir_usuarios_ativos_por_mes', 'usuarios_ativos_por_mes');
+
+// Função para retornar a quantidade de usuários cadastrados por mês no ano corrente
+function quantidade_usuarios_cadastrados_por_mes() {
+	global $wpdb;
+
+	$year = date("Y"); // Obtém o ano corrente
+
+	$results = $wpdb->get_results("
+        SELECT
+            MONTH(u.user_registered) AS month,
+            COUNT(u.ID) AS total_users_cadastrados
+        FROM {$wpdb->prefix}users u
+        WHERE YEAR(u.user_registered) = $year
+        GROUP BY MONTH(u.user_registered)
+    ");
+
+	$output = [];
+	// Preenche o array de saída com os resultados
+	foreach ($results as $result) {
+		$month_name = date("F", mktime(0, 0, 0, $result->month, 1));
+		$output[$year][$month_name] = $result->total_users_cadastrados;
+	}
+
+	return $output;
+}
+
+// Função para retornar a quantidade de usuários ativos cadastrados por mês no ano corrente
+function quantidade_usuarios_ativos_por_mes() {
+	global $wpdb;
+
+	$year = date("Y"); // Obtém o ano corrente
+
+	$results = $wpdb->get_results("
+        SELECT
+            MONTH(um.user_registered) AS month,
+            COUNT(um.user_id) AS total_users_ativos
+        FROM {$wpdb->prefix}usermeta um
+        INNER JOIN {$wpdb->prefix}users u ON um.user_id = u.ID
+        WHERE YEAR(u.user_registered) = $year AND um.meta_key = 'user_status' AND um.meta_value = 'ativo'
+        GROUP BY MONTH(u.user_registered)
+    ");
+
+	$output = [];
+	// Preenche o array de saída com os resultados
+	foreach ($results as $result) {
+		$month_name = date("F", mktime(0, 0, 0, $result->month, 1));
+		$output[$year][$month_name] = $result->total_users_ativos;
+	}
+
+	return $output;
+}
+
+
+// Suponha que o ID do usuário logado seja $user_id_logged_in
+
+// Função para obter o código de convite de um usuário
+function get_codigo_invite($user_id)
+{
+	return get_user_meta($user_id, 'codigo_invite', true);
+}
+
+// Função para obter a quantidade de usuários indicados por um determinado código de convite
+function quantidade_usuarios_indicados($codigo_invite)
+{
+	// Inicialize a quantidade de usuários indicados como zero
+	$quantidade_usuarios_indicados = 0;
+
+	// Obtenha todos os usuários
+	$users = get_users(array('meta_key' => 'codigo_invite', 'meta_value' => $codigo_invite));
+
+	// Percorra todos os usuários para contar quantos têm o código de convite correspondente
+	foreach ($users as $user) {
+		// Exclua o próprio usuário logado da contagem
+		global $user_id_logged_in;
+		if ($user->ID != $user_id_logged_in) {
+			$quantidade_usuarios_indicados++;
+		}
+	}
+
+	return $quantidade_usuarios_indicados;
+}
+
+function quantidade_usuarios_ativos($codigo_invite)
+{
+	// Inicialize a quantidade de usuários ativos com código de convite como zero
+	$quantidade_usuarios_ativos = 0;
+
+	// Obtenha todos os usuários com o código de convite correspondente
+	$users = get_users(array(
+		'meta_key'     => 'codigo_invite',
+		'meta_value'   => $codigo_invite,
+		'meta_compare' => 'EXISTS', // Garante que o meta_key 'codigo_invite' exista para o usuário
+	));
+
+	// Percorra todos os usuários para contar quantos estão ativos
+	foreach ($users as $user) {
+		// Verifique se o usuário está ativo
+		if ('ativo' === get_user_meta($user->ID, 'user_status', true)) {
+			$quantidade_usuarios_ativos++;
+		}
+	}
+
+	return $quantidade_usuarios_ativos;
+}
+
+
+
+

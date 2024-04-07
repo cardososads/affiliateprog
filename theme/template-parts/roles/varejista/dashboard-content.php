@@ -60,6 +60,13 @@ function prepararDadosParaGrafico($resultados) {
 
 	return $dados_mensais;
 }
+$user_id_logged_in = get_current_user();
+// Obtenha o código de convite do usuário logado
+$codigo_invite_usuario_logado = get_codigo_invite($user_id_logged_in);
+
+// Obtenha a quantidade de usuários indicados pelo usuário logado
+$quantidade_usuarios_indicados = quantidade_usuarios_indicados($codigo_invite_usuario_logado);
+$quantidade_usuarios_ativos = quantidade_usuarios_ativos($codigo_invite_usuario_logado);
 ?>
 
 <!-- Seção HTML -->
@@ -81,8 +88,7 @@ function prepararDadosParaGrafico($resultados) {
 			<div class="flex flex-col">
 				<h3 class="text-base font-medium leading-4 text-slate-400">Indicações</h3>
 				<div class="flex gap-4 mt-4">
-					<p class="text-lg font-medium leading-6 text-gray-700">68</p>
-					<p class="my-auto text-sm leading-4 text-rose-700">-17,5%</p>
+					<p class="text-lg font-medium leading-6 text-gray-700"><?php echo $quantidade_usuarios_indicados ?></p>
 				</div>
 			</div>
 			<img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/0f5aea33a5800a28ddc8437469802aff7ffa48ce2f3776d22597f9c9ffab704d?apiKey=dbcd1f706eb34fbd832e207cfae2bdbc&" alt="Indication icon" class="shrink-0 my-auto aspect-square fill-slate-500 w-[45px]">
@@ -92,8 +98,7 @@ function prepararDadosParaGrafico($resultados) {
 			<div class="flex flex-col">
 				<h3 class="text-base font-medium leading-4 text-slate-400">Indicações aprovadas</h3>
 				<div class="flex gap-4 mt-4 whitespace-nowrap">
-					<p class="text-lg font-medium leading-6 text-gray-700">53</p>
-					<p class="my-auto text-sm leading-4 text-slate-500">+5%</p>
+					<p class="text-lg font-medium leading-6 text-gray-700"><?php echo $quantidade_usuarios_ativos ?></p>
 				</div>
 			</div>
 			<img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/9195ce572162ae219b6738263e6a665bbb03627060a5c7f956a2bb5ea766d490?apiKey=dbcd1f706eb34fbd832e207cfae2bdbc&" alt="Approved indication icon" class="shrink-0 my-auto aspect-square fill-slate-500 w-[45px]">
