@@ -21,9 +21,27 @@ $user_email = get_user_meta($current_user_id, 'email', true);
 					<svg id="toggleSidebarMobileHamburger" class="w-6 h-6" fill="#41837F" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
 					<svg id="toggleSidebarMobileClose" class="hidden w-6 h-6" fill="#41837F" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 				</button>
-				<a href="" class="flex ml-2 md:mr-24">
-				<img src="<?php echo get_template_directory_uri() . '/img/logo_interacao.svg' ; ?>" class="h-8 mr-3" alt="FlowBite Logo" />
+				<a href="" class="flex ml-2 md:mr-24 text-2xl font-bold">
+					<img src="<?php echo get_template_directory_uri() . '/img/logo_interacao.svg'; ?>" class="h-8 mr-3" alt="FlowBite Logo" />
+					<img src="<?php echo get_template_directory_uri() . '/img/logovarejomais.jpg'; ?>" class="h-8 mr-3" alt="FlowBite Logo" />
+					<?php
+					// Verifica o tipo de usuário
+					if (current_user_can('administrator')) {
+						// Se for administrador
+						echo 'Área do Administrador';
+					} elseif (current_user_can('varejista')) {
+						// Se for varejista
+						echo 'Área do Varejista';
+					} elseif (current_user_can('oficina')) {
+						// Se for oficina
+						echo 'Área da Oficina';
+					} else {
+						// Se não for nenhum dos tipos acima
+						echo '';
+					}
+					?>
 				</a>
+
 			</div>
 			<div class="flex items-center">
 				<!-- Profile -->
@@ -31,7 +49,7 @@ $user_email = get_user_meta($current_user_id, 'email', true);
 					<div>
 						<button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button-2" aria-expanded="false" data-dropdown-toggle="dropdown-2">
 							<span class="sr-only">Open user menu</span>
-							<img class="w-8 h-8 rounded-full" src="<?= get_template_directory_uri() . '/img/Background.svg' ?>" alt="user photo">
+							<img class="w-8 h-8 rounded-full" src="<?= get_template_directory_uri() . '/img/52eabf633ca6414e60a7677b0b917d92-criador-de-avatar-masculino.webp' ?>" alt="user photo">
 						</button>
 					</div>
 					<!-- Dropdown menu -->

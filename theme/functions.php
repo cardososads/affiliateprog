@@ -158,6 +158,14 @@ function affiliateprog_scripts() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'affiliateprog_scripts' );
+function enqueue_scripts() {
+	// Carrega o jQuery
+	wp_enqueue_script('jquery');
+
+	// Carrega o jQuery Mask Plugin
+	wp_enqueue_script('jquery-mask', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js', array('jquery'), null, true);
+}
+add_action('wp_enqueue_scripts', 'enqueue_scripts');
 
 function enqueue_jquery_from_google_cdn() {
 	wp_enqueue_script('jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js', array(), '3.7.1', true);
@@ -232,6 +240,9 @@ require get_template_directory() . '/inc/template-functions.php';
 
 require get_template_directory() . '/inc/users/user-menu-contents.php';
 require get_template_directory() . '/inc/users/user-roles.php';
+require get_template_directory() . '/inc/users/WP_User_Query_Helper.php';
+require get_template_directory() . '/inc/users/WP_Metas_Query_Helper.php';
+require get_template_directory() . '/inc/users/WP_Meta_Oficinas_Query_Helper.php';
 
 /* Disable WordPress Admin Bar for all users */
 add_filter( 'show_admin_bar', '__return_false' );
@@ -245,26 +256,20 @@ function enqueue_chart_js() {
 }
 add_action('wp_enqueue_scripts', 'enqueue_chart_js');
 
-
-// Função para criar a tabela no ativação do plugin ou do tema
-function criar_tabela_meta_filtros() {
+function criar_tabela_metas() {
 	global $wpdb;
-	$table_name = $wpdb->prefix . 'meta_filtros';
+	$table_name = $wpdb->prefix . 'metas';
 	$wpdb_collate = $wpdb->collate;
 
 	$sql = "CREATE TABLE IF NOT EXISTS $table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         cnpj varchar(255) NOT NULL,
-        meta_filtros decimal(10,2) NOT NULL,
-        atingido_filtros decimal(10,2) NOT NULL,
-        meta_filtro_de_oleo decimal(10,2) NOT NULL,
-        atingido_filtro_de_oleo decimal(10,2) NOT NULL,
-        meta_filtro_de_cabine decimal(10,2) NOT NULL,
-        atingido_filtro_de_cabine decimal(10,2) NOT NULL,
-        meta_filtro_de_combustivel decimal(10,2) NOT NULL,
-        atingido_filtro_de_combustivel decimal(10,2) NOT NULL,
-        meta_filtro_de_ar decimal(10,2) NOT NULL,
-        atingido_filtro_de_ar decimal(10,2) NOT NULL,
+        meta_commodities decimal(10,0) NOT NULL,
+        commodities_atingido decimal(10,0) NOT NULL,
+        meta_linhas_gerais decimal(10,0) NOT NULL,
+        linhas_gerais_atingido decimal(10,0) NOT NULL,
+        total_geral decimal(10,0) NOT NULL,
+        bonus_geral decimal(10,0) NOT NULL,
         data_registro datetime NOT NULL,
         PRIMARY KEY  (id)
     );";
@@ -272,22 +277,21 @@ function criar_tabela_meta_filtros() {
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	dbDelta( $sql );
 }
-add_action( 'init', 'criar_tabela_meta_filtros' );
+add_action( 'init', 'criar_tabela_metas' );
 
-function criar_tabela_meta_eletrica() {
+function criar_tabela_meta_oficinas() {
 	global $wpdb;
-	$table_name = $wpdb->prefix . 'meta_eletrica';
+	$table_name = $wpdb->prefix . 'meta_oficinas';
 	$wpdb_collate = $wpdb->collate;
 
 	$sql = "CREATE TABLE IF NOT EXISTS $table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         cnpj varchar(255) NOT NULL,
-        meta_alternador decimal(10,2) NOT NULL,
-        atingido_alternador decimal(10,2) NOT NULL,
-        meta_motor_de_partida decimal(10,2) NOT NULL,
-        atingido_motor_de_partida decimal(10,2) NOT NULL,
-        meta_componentes_eletricos decimal(10,2) NOT NULL,
-        atingido_componentes_eletricos decimal(10,2) NOT NULL,
+        pacotes varchar(255) NOT NULL,
+        percentual_bonus decimal(10,0) NOT NULL,
+        meta_mensal decimal(10,0) NOT NULL,
+        mes decimal(10,0) NOT NULL,
+        ano decimal(10,0) NOT NULL,
         data_registro datetime NOT NULL,
         PRIMARY KEY  (id)
     );";
@@ -295,24 +299,16 @@ function criar_tabela_meta_eletrica() {
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	dbDelta( $sql );
 }
-add_action( 'init', 'criar_tabela_meta_eletrica' );
+add_action( 'init', 'criar_tabela_meta_oficinas' );
 
-function criar_tabela_meta_freios() {
+function criar_tabela_validate_cnpjs() {
 	global $wpdb;
-	$table_name = $wpdb->prefix . 'meta_freios';
+	$table_name = $wpdb->prefix . 'validate_cnpjs';
 	$wpdb_collate = $wpdb->collate;
 
 	$sql = "CREATE TABLE IF NOT EXISTS $table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         cnpj varchar(255) NOT NULL,
-        meta_pastilha_de_friccao decimal(10,2) NOT NULL,
-        atingido_pastilha_de_friccao decimal(10,2) NOT NULL,
-		meta_de_fluido decimal(10,2) NOT NULL,
-        atingido_fluido decimal(10,2) NOT NULL,
-		meta_de_hidraulica decimal(10,2) NOT NULL,
-        atingido_hidraulica decimal(10,2) NOT NULL,
-		meta_de_cc_braking_systems decimal(10,2) NOT NULL,
-        atingido_cc_braking_systems decimal(10,2) NOT NULL,
         data_registro datetime NOT NULL,
         PRIMARY KEY  (id)
     );";
@@ -320,7 +316,7 @@ function criar_tabela_meta_freios() {
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	dbDelta( $sql );
 }
-add_action( 'init', 'criar_tabela_meta_freios' );
+add_action( 'init', 'criar_tabela_validate_cnpjs' );
 
 
 
@@ -377,7 +373,7 @@ function send_invite_email() {
 }
 
 function importar_csv_e_processar_upload($arquivo_tmp) {
-	global $dados_csv_processados;
+	global $dados_csv_processados, $wpdb;
 
 	$dados_csv_processados = array();
 
@@ -388,7 +384,7 @@ function importar_csv_e_processar_upload($arquivo_tmp) {
 	if (($handle = fopen($arquivo_tmp, "r")) !== false) {
 		$cabecalhos = fgetcsv($handle, 1000, ",");
 
-		$cabecalhos = array_map(function($cabecalho) {
+		$cabecalhos = array_map(function ($cabecalho) {
 			$cabecalho = trim(preg_replace('/[^\w\s]/u', '', $cabecalho));
 			$cabecalho = str_replace(' ', '_', $cabecalho);
 			$cabecalho = remove_acentos($cabecalho);
@@ -398,9 +394,18 @@ function importar_csv_e_processar_upload($arquivo_tmp) {
 		}, $cabecalhos);
 
 		while (($linha = fgetcsv($handle, 1000, ",")) !== false) {
-			$linha = array_map(function($valor) {
-				return preg_replace('/[^0-9]/', '', $valor);
+			$linha = array_map(function ($valor) {
+				// Remove caracteres não numéricos, exceto ponto e vírgula
+				$valor = preg_replace('/[^0-9,.]/', '', $valor);
+				// Substitui vírgulas por ponto para garantir formato decimal
+				$valor = str_replace(',', '.', $valor);
+				// Converte para decimal
+				$valor = convert_moeda_para_decimal($valor);
+				return $valor;
 			}, $linha);
+
+			// Ajusta o formato do CNPJ
+			$linha[0] = formatar_cnpj($linha[0]);
 
 			$linha_associativa = array_combine($cabecalhos, $linha);
 
@@ -409,10 +414,49 @@ function importar_csv_e_processar_upload($arquivo_tmp) {
 			$dados_csv_processados[] = $linha_processada;
 		}
 		fclose($handle);
+
+		// Verificar se a tabela existe antes de tentar inserir os dados
+		if (tabela_existe($wpdb->prefix . 'meta_oficinas')) {
+			// Inserir os dados na tabela
+			foreach ($dados_csv_processados as $linha) {
+				$resultado = $wpdb->insert($wpdb->prefix . 'meta_oficinas', $linha);
+				if ($resultado === false) {
+					// Log de erro de inserção
+					error_log('Erro ao inserir dados na tabela meta_oficinas: ' . $wpdb->last_error);
+				}
+			}
+		} else {
+			// Log de erro de tabela inexistente
+			error_log('Tabela meta_oficinas não existe no banco de dados.');
+		}
+
 		return true;
 	} else {
 		return false;
 	}
+}
+
+function formatar_cnpj($cnpj) {
+	// Remove caracteres não numéricos
+	$cnpj = preg_replace('/[^0-9]/', '', $cnpj);
+
+	// Verifica se o CNPJ tem o tamanho correto
+	if (strlen($cnpj) === 14) {
+		// Formata o CNPJ no padrão XX.XXX.XXX/XXXX-XX
+		$cnpj_formatado = preg_replace('/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/', '$1.$2.$3/$4-$5', $cnpj);
+		return $cnpj_formatado;
+	} else {
+		// Retorna o CNPJ sem formatação
+		return $cnpj;
+	}
+}
+
+function convert_moeda_para_decimal($valor_moeda) {
+	// Remove todos os caracteres não numéricos e o ponto decimal
+	$valor_moeda = preg_replace('/[^0-9]/', '', $valor_moeda);
+	// Divide por 100 para converter centavos
+	$valor_decimal = $valor_moeda / 100;
+	return $valor_decimal;
 }
 
 function remove_acentos($string) {
@@ -449,7 +493,6 @@ function verificar_compatibilidade_campos($dados, $nome_tabela) {
 			$colunas_tabela[] = $coluna->Field;
 		}
 	}
-
 	// Variável para contar o número total de inserções bem-sucedidas
 	$total_insercoes = 0;
 
@@ -476,7 +519,9 @@ function verificar_compatibilidade_campos($dados, $nome_tabela) {
 
 		// Adiciona a data de registro à array de inserção
 		$dados_insercao['data_registro'] = current_time('mysql');
-
+		echo '<pre>';
+		print_r($dados_insercao);
+		echo '</pre>';
 		// Insere os dados na tabela
 		$resultado = $wpdb->insert($nome_tabela_com_prefixo, $dados_insercao);
 
@@ -491,7 +536,6 @@ function verificar_compatibilidade_campos($dados, $nome_tabela) {
 	echo "Total de linhas inseridas: $total_insercoes";
 }
 
-
 // Função para verificar se a tabela existe no banco de dados
 function tabela_existe($nome_tabela) {
 	global $wpdb; // Obtém a instância global do objeto do WordPress Database
@@ -502,8 +546,6 @@ function tabela_existe($nome_tabela) {
 	// Retorna true se a tabela existe, false caso contrário
 	return $resultado !== null;
 }
-
-
 
 // Função para acessar os dados da tabela com filtros opcionais
 function meu_acesso_tabela($tabela, $filtros = array()) {
@@ -531,172 +573,47 @@ function meu_acesso_tabela($tabela, $filtros = array()) {
 	return $resultados;
 }
 
-// Função para retornar a quantidade de usuários cadastrados por mês
-function usuarios_cadastrados_por_mes() {
+function get_non_admin_users_count() {
 	global $wpdb;
 
-	$results = $wpdb->get_results("
-        SELECT
-            YEAR(user_registered) AS year,
-            MONTH(user_registered) AS month,
-            COUNT(*) AS total_users
-        FROM
-            {$wpdb->prefix}users
-        GROUP BY
-            YEAR(user_registered),
-            MONTH(user_registered)
+	$users_table = $wpdb->prefix . 'users';
+
+	$count = $wpdb->get_var("
+        SELECT COUNT(*)
+        FROM $users_table
+        WHERE ID NOT IN (
+            SELECT user_id
+            FROM {$wpdb->prefix}usermeta
+            WHERE meta_key = '{$wpdb->prefix}capabilities'
+            AND meta_value LIKE '%administrator%'
+        )
     ");
 
-	$output = '<table>';
-
-	foreach ($results as $result) {
-		$output .= '<tr>';
-		$output .= '<td class="text-lg font-medium leading-6 text-gray-700">' . $result->total_users . '</td>';
-		$output .= '</tr>';
-	}
-
-	$output .= '</table>';
-
-	return $output;
-}
-add_shortcode('exibir_usuarios_cadastrados', 'usuarios_cadastrados_por_mes');
-
-// Função para retornar a quantidade de usuários ativos cadastrados por mês
-function usuarios_ativos_por_mes() {
-	global $wpdb;
-
-	$results = $wpdb->get_results("
-        SELECT
-            YEAR(u.user_registered) AS year,
-            MONTH(u.user_registered) AS month,
-            COUNT(*) AS total_users_ativos
-        FROM
-            {$wpdb->prefix}users u
-        JOIN
-            {$wpdb->prefix}usermeta um ON u.ID = um.user_id
-        WHERE
-            um.meta_key = 'user_status' AND um.meta_value = 'ativo'
-        GROUP BY
-            YEAR(u.user_registered),
-            MONTH(u.user_registered)
-    ");
-
-	$output = [];
-
-	foreach ($results as $result) {
-		$month_name = date("F", mktime(0, 0, 0, $result->month, 1));
-		$output[$result->year][$month_name] = $result->total_users_ativos;
-	}
-
-	return $output;
+	return $count;
 }
 
-add_shortcode('exibir_usuarios_ativos_por_mes', 'usuarios_ativos_por_mes');
+add_action('wp_ajax_check_cnpj_existence', 'check_cnpj_existence');
+add_action('wp_ajax_nopriv_check_cnpj_existence', 'check_cnpj_existence');
 
-// Função para retornar a quantidade de usuários cadastrados por mês no ano corrente
-function quantidade_usuarios_cadastrados_por_mes() {
-	global $wpdb;
+function check_cnpj_existence() {
+	$cnpj = $_POST['cnpj'];
 
-	$year = date("Y"); // Obtém o ano corrente
-
-	$results = $wpdb->get_results("
-        SELECT
-            MONTH(u.user_registered) AS month,
-            COUNT(u.ID) AS total_users_cadastrados
-        FROM {$wpdb->prefix}users u
-        WHERE YEAR(u.user_registered) = $year
-        GROUP BY MONTH(u.user_registered)
-    ");
-
-	$output = [];
-	// Preenche o array de saída com os resultados
-	foreach ($results as $result) {
-		$month_name = date("F", mktime(0, 0, 0, $result->month, 1));
-		$output[$year][$month_name] = $result->total_users_cadastrados;
-	}
-
-	return $output;
-}
-
-// Função para retornar a quantidade de usuários ativos cadastrados por mês no ano corrente
-function quantidade_usuarios_ativos_por_mes() {
-	global $wpdb;
-
-	$year = date("Y"); // Obtém o ano corrente
-
-	$results = $wpdb->get_results("
-        SELECT
-            MONTH(um.user_registered) AS month,
-            COUNT(um.user_id) AS total_users_ativos
-        FROM {$wpdb->prefix}usermeta um
-        INNER JOIN {$wpdb->prefix}users u ON um.user_id = u.ID
-        WHERE YEAR(u.user_registered) = $year AND um.meta_key = 'user_status' AND um.meta_value = 'ativo'
-        GROUP BY MONTH(u.user_registered)
-    ");
-
-	$output = [];
-	// Preenche o array de saída com os resultados
-	foreach ($results as $result) {
-		$month_name = date("F", mktime(0, 0, 0, $result->month, 1));
-		$output[$year][$month_name] = $result->total_users_ativos;
-	}
-
-	return $output;
-}
-
-
-// Suponha que o ID do usuário logado seja $user_id_logged_in
-
-// Função para obter o código de convite de um usuário
-function get_codigo_invite($user_id)
-{
-	return get_user_meta($user_id, 'codigo_invite', true);
-}
-
-// Função para obter a quantidade de usuários indicados por um determinado código de convite
-function quantidade_usuarios_indicados($codigo_invite)
-{
-	// Inicialize a quantidade de usuários indicados como zero
-	$quantidade_usuarios_indicados = 0;
-
-	// Obtenha todos os usuários
-	$users = get_users(array('meta_key' => 'codigo_invite', 'meta_value' => $codigo_invite));
-
-	// Percorra todos os usuários para contar quantos têm o código de convite correspondente
-	foreach ($users as $user) {
-		// Exclua o próprio usuário logado da contagem
-		global $user_id_logged_in;
-		if ($user->ID != $user_id_logged_in) {
-			$quantidade_usuarios_indicados++;
-		}
-	}
-
-	return $quantidade_usuarios_indicados;
-}
-
-function quantidade_usuarios_ativos($codigo_invite)
-{
-	// Inicialize a quantidade de usuários ativos com código de convite como zero
-	$quantidade_usuarios_ativos = 0;
-
-	// Obtenha todos os usuários com o código de convite correspondente
-	$users = get_users(array(
-		'meta_key'     => 'codigo_invite',
-		'meta_value'   => $codigo_invite,
-		'meta_compare' => 'EXISTS', // Garante que o meta_key 'codigo_invite' exista para o usuário
+	// Consultar se o CNPJ já existe entre os usuários cadastrados
+	$user_query = new WP_User_Query(array(
+		'meta_query' => array(
+			array(
+				'key' => 'cnpj',
+				'value' => $cnpj
+			)
+		)
 	));
 
-	// Percorra todos os usuários para contar quantos estão ativos
-	foreach ($users as $user) {
-		// Verifique se o usuário está ativo
-		if ('ativo' === get_user_meta($user->ID, 'user_status', true)) {
-			$quantidade_usuarios_ativos++;
-		}
+	if (!empty($user_query->results)) {
+		echo 'exist';
+	} else {
+		echo 'not_exist';
 	}
 
-	return $quantidade_usuarios_ativos;
+	wp_die();
 }
-
-
-
 

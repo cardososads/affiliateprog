@@ -15,9 +15,10 @@ $view = isset($_GET['content']) && isset($contents[$_GET['content']]) ? $_GET['c
 <?php get_footer(); ?>
 
 <div class="flex w-full h-screen">
+	<?php if ($cargo !== 'oficina') : ?>
 	<!-- SIDEBAR -->
 	<aside id="sidebar"
-		   class="absolute md:relative top-0 left-0 z-40 sm:z-0 flex flex-col flex-shrink-0 sm:visible w-64 h-screen pt-14 font-normal duration-75 lg:flex transition-transform -translate-x-full sm:translate-x-0"
+		   class="absolute md:relative top-0 left-0 z-40 sm:z-0 flex flex-col flex-shrink-0 sm:visible w-56 h-screen pt-14 font-normal duration-75 lg:flex transition-transform -translate-x-full sm:translate-x-0"
 		   aria-label="Sidebar">
 		<div
 			class="relative flex flex-col flex-1 min-h-0 pt-0 bg-verde-10% border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -46,13 +47,13 @@ $view = isset($_GET['content']) && isset($contents[$_GET['content']]) ? $_GET['c
 							<li>
 								<?php if ($key === $view) : ?>
 									<a href="<?php echo esc_url(add_query_arg('content', $key, get_permalink())); ?>"
-									   class="flex items-center rounded-3xl bg-slate-200 p-4 gap-2">
+									   class="flex text-[14px] items-center rounded-3xl bg-slate-200 p-4 gap-2">
 										<?php echo $content['icon']; ?>
 										<?php echo $content['title']; ?>
 									</a>
 								<?php else: ?>
 									<a href="<?php echo esc_url(add_query_arg('content', $key, get_permalink())); ?>"
-									   class="flex items-center p-4 gap-2">
+									   class="flex text-[14px] items-center p-4 gap-2">
 										<?php echo $content['icon']; ?>
 										<?php echo $content['title']; ?>
 									</a>
@@ -68,7 +69,7 @@ $view = isset($_GET['content']) && isset($contents[$_GET['content']]) ? $_GET['c
 		</div>
 		<div
 			class="hidden absolute bottom-0 left-0 justify-center p-4 space-x-4 w-full lg:flex  dark:bg-gray-800 z-20 border-r border-gray-200 dark:border-gray-700">
-			<a href="https://api.whatsapp.com/send?phone=5519971719172" data-tooltip-target="tooltip-whats"
+			<a href="https://api.whatsapp.com/send?phone=5519971719172" data-tooltip-target="tooltip-whats" target="_blank"
 			   class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer bg-white hover:bg-gray-200 shadow-xl">
 				<svg height="auto" width="25" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
 					 xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve"
@@ -88,7 +89,7 @@ $view = isset($_GET['content']) && isset($contents[$_GET['content']]) ? $_GET['c
 				Whatsapp
 				<div class="tooltip-arrow" data-popper-arrow></div>
 			</div>
-			<a href="https://suporte-bosch.zendesk.com/hc/pt-br" data-tooltip-target="tooltip-settings"
+			<a href="https://suporte-bosch.zendesk.com/hc/pt-br" data-tooltip-target="tooltip-settings" target="_blank"
 			   class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer bg-white hover:bg-gray-200 shadow-xl">
 				<svg height="auto" width="25" xmlns="http://www.w3.org/2000/svg"
 					 xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" xml:space="preserve" fill="#000000"><g
@@ -173,7 +174,7 @@ $view = isset($_GET['content']) && isset($contents[$_GET['content']]) ? $_GET['c
 			</div>
 		</div>
 	</aside>
-
+	<?php endif; ?>
 	<div class="fixed inset-0 z-10 hidden bg-gray-900/50 dark:bg-gray-900/90" id="sidebarBackdrop"></div>
 
 	<!-- END SIDEBAR -->

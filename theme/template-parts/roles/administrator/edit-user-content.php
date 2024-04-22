@@ -3,26 +3,78 @@ $users = get_users(array('role__in' => array('varejista', 'oficina')));
 ?>
 
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-	<!-- Adicione este código acima da tabela -->
-	<div class="flex items-center justify-end mb-4">
-		<label for="statusFilter" class="mr-2">Filtrar por Status:</label>
-		<select id="statusFilter" class="border border-gray-300 rounded px-3 py-2">
-			<option value="">Todos</option>
-			<option value="pendente">Pendente</option>
-			<option value="ativo">Ativo</option>
-			<option value="reprovado">Reprovado</option>
-			<option value="inativo">Inativo</option>
-		</select>
+	<div class="flex items-center justify-between mb-4">
+		<div class="flex flex-col">
+			<label for="razaoSocialFilter">Filtrar por Razão Social:</label>
+			<input id="razaoSocialFilter" type="text" class="border border-gray-300 rounded px-3 py-2">
+		</div>
+
+		<div class="flex flex-col">
+			<label for="cnpjFilter">Filtrar por CNPJ:</label>
+			<input id="cnpjFilter" type="text" class="border border-gray-300 rounded px-3 py-2">
+		</div>
+
+		<div class="flex flex-col">
+			<label for="emailFilter">Filtrar por E-mail:</label>
+			<input id="emailFilter" type="text" class="border border-gray-300 rounded px-3 py-2">
+		</div>
+
+		<div class="flex flex-col">
+			<label for="tipoUsuarioFilter">Filtrar por Tipo de Usuário:</label>
+			<select id="tipoUsuarioFilter" class="border border-gray-300 rounded px-3 py-2">
+				<option value="">Todos</option>
+				<option value="varejista">Varejista</option>
+				<option value="oficina">Oficina</option>
+			</select>
+		</div>
+
+		<div class="flex flex-col">
+			<label for="statusFilter">Filtrar por Status:</label>
+			<select id="statusFilter" class="border border-gray-300 rounded px-3 py-2">
+				<option value="">Todos</option>
+				<option value="pendente">Pendente</option>
+				<option value="ativo">Ativo</option>
+				<option value="reprovado">Reprovado</option>
+				<option value="inativo">Inativo</option>
+			</select>
+		</div>
 	</div>
 
-	<!-- Aqui está o JavaScript que irá filtrar os resultados -->
 	<script>
 		jQuery(document).ready(function($) {
-			$('#statusFilter').on('change', function() {
-				var selectedStatus = $(this).val().toLowerCase();
+			$('#razaoSocialFilter, #cnpjFilter, #emailFilter, #tipoUsuarioFilter, #statusFilter').on('input change', function() {
+				var razaoSocialFilter = $('#razaoSocialFilter').val().toLowerCase();
+				var cnpjFilter = $('#cnpjFilter').val().toLowerCase();
+				var emailFilter = $('#emailFilter').val().toLowerCase();
+				var tipoUsuarioFilter = $('#tipoUsuarioFilter').val().toLowerCase();
+				var statusFilter = $('#statusFilter').val().toLowerCase();
+
 				$('tbody tr').each(function() {
+					var razaoSocial = $(this).find('td:eq(0)').text().trim().toLowerCase();
+					var cnpj = $(this).find('td:eq(1)').text().trim().toLowerCase();
+					var email = $(this).find('td:eq(2)').text().trim().toLowerCase();
+					var tipoUsuario = $(this).find('td:eq(3)').text().trim().toLowerCase();
 					var status = $(this).find('td:eq(4)').text().trim().toLowerCase();
-					if (selectedStatus === '' || status === selectedStatus) {
+
+					var showRow = true;
+
+					if (razaoSocialFilter !== '' && !razaoSocial.includes(razaoSocialFilter)) {
+						showRow = false;
+					}
+					if (cnpjFilter !== '' && !cnpj.includes(cnpjFilter)) {
+						showRow = false;
+					}
+					if (emailFilter !== '' && !email.includes(emailFilter)) {
+						showRow = false;
+					}
+					if (tipoUsuarioFilter !== '' && tipoUsuario !== tipoUsuarioFilter) {
+						showRow = false;
+					}
+					if (statusFilter !== '' && status !== statusFilter) {
+						showRow = false;
+					}
+
+					if (showRow) {
 						$(this).show();
 					} else {
 						$(this).hide();
@@ -77,26 +129,19 @@ $users = get_users(array('role__in' => array('varejista', 'oficina')));
 						<?php echo strtoupper(get_user_meta($user->ID, 'user_status', true)); ?>
 					</td>
 					<td class="px-6 py-4">
-						<!-- Modal toggle -->
 						<button data-modal-target="default-modal-<?php echo $user->ID; ?>" data-modal-toggle="default-modal-<?php echo $user->ID; ?>" class="block text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
 							Editar
 						</button>
-						<!-- Main modal -->
 						<div id="default-modal-<?php echo $user->ID; ?>" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
 							<div class="relative mt-14 p-4 w-full max-w-8xl max-h-full">
-								<!-- Modal content -->
 								<div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-									<!-- Modal header -->
 									<div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
 										<h3 class="text-xl font-semibold text-gray-900 dark:text-white">
 											Editar Usuário
 										</h3>
 									</div>
-									<!-- Modal body -->
 									<div class="p-4 md:p-5 space-y-4">
-										<!-- Formulário de edição de usuário -->
 										<form id="editUserForm-<?php echo $user->ID; ?>" class="space-y-4 grid grid-cols-3 gap-4" action="<?php echo esc_url(admin_url('admin-ajax.php')); ?>" method="POST">
-											<!-- Campos do formulário -->
 											<?php $nonce = wp_create_nonce('salvar_dados_usuario_nonce'); ?>
 
 											<input type="hidden" name="action" value="editar_usuario">
@@ -113,7 +158,6 @@ $users = get_users(array('role__in' => array('varejista', 'oficina')));
 												</div>
 											<?php endforeach; ?>
 
-											<!-- Campo de seleção de status -->
 											<div class="col-span-1">
 												<label for="editUserStatus<?php echo $user->ID; ?>" class="font-medium text-gray-700 dark:text-gray-300">Status:</label>
 												<select name="user_status" id="editUserStatus<?php echo $user->ID; ?>" class="w-full border border-gray-300 rounded px-3 py-2">
@@ -124,7 +168,6 @@ $users = get_users(array('role__in' => array('varejista', 'oficina')));
 												</select>
 											</div>
 
-											<!-- Modal footer -->
 											<div class="col-span-3 flex items-center justify-end p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
 												<button data-modal-hide="default-modal-<?php echo $user->ID; ?>" type="submit" class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 													Salvar
@@ -136,35 +179,23 @@ $users = get_users(array('role__in' => array('varejista', 'oficina')));
 												$('#editUserForm-<?php echo $user->ID; ?>').on('submit', function(e) {
 													e.preventDefault();
 
-													// Obter os dados do formulário manualmente
 													var formData = new FormData(this);
-
-													// Adicionar a ação ao objeto FormData
 													formData.append('action', 'editar_usuario');
 
-													// Obter o valor selecionado do campo de status
 													var userStatus = $('#editUserStatus<?php echo $user->ID; ?>').val();
 													formData.append('user_status', userStatus);
 
-													// Iterar sobre os pares chave/valor do objeto FormData
-													for (const pair of formData.entries()) {
-														console.log(pair[0] + ': ' + pair[1]);
-													}
-
-													// Fazer a requisição AJAX
 													$.ajax({
 														type: 'POST',
 														url: '<?php echo esc_url(admin_url('admin-ajax.php')); ?>',
 														data: formData,
-														processData: false, // Evitar que o jQuery processe os dados
-														contentType: false, // Evitar que o jQuery defina o Content-Type
+														processData: false,
+														contentType: false,
 														success: function(response) {
-															// Manipular a resposta do servidor
 															console.log(response);
 															location.reload();
 														},
 														error: function(xhr, status, error) {
-															// Manipular erros, se houver
 															console.error(xhr.responseText);
 														}
 													});

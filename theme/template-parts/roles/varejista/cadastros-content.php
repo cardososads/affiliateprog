@@ -64,7 +64,7 @@ foreach ($indicated_users_by_month as $data) {
 
 			<div class="flex items-center mb-5 gap-4">
 				<h2 class="text-2xl font-semibold">Link de Afiliado</h2>
-				<?php $affiliateLink = site_url('/cadastro-oficina') . '/?' . $codigo_invite; ?>
+				<?php $affiliateLink = site_url('/cadastro-oficina') . '/?codigo_invite=' . $codigo_invite; ?>
 				<input type="hidden" value="<?= $affiliateLink ?>" id="affiliateLink" readonly>
 				<button class="px-[10px] py-[5px] bg-verde rounded-xl text-white font-semibold" onclick="copyLink()">Copiar link</button>
 			</div>
@@ -84,14 +84,19 @@ foreach ($indicated_users_by_month as $data) {
 						<div class="flex flex-col mb-4">
 							<label for="cnpj" class="mb-2">CNPJ</label>
 							<input type="text" id="cnpj" name="cnpj" required class="py-2 px-3 border rounded-md focus:outline-none focus:border-blue-400">
+							<span id="cnpj-error"></span>
 						</div>
-
-						<button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+						<script>
+							jQuery(document).ready(function($) {
+								$('#cnpj').mask('00.000.000/0000-00', {reverse: true});
+							});
+						</script>
+						<button type="submit" id="submit-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
 							Convidar
 						</button>
 					</form>
 					<?php if (isset($_GET['invite_email_success']) && $_GET['invite_email_success'] === 'true') : ?>
-						<div class="success-message">E-mail enviado com sucesso para o administrador do site.</div>
+						<div class="success-message">E-mail enviado com sucesso.</div>
 					<?php elseif (isset($_GET['invite_email_error']) && $_GET['invite_email_error'] === 'true') : ?>
 						<div class="error-message">Falha ao enviar o e-mail.</div>
 					<?php endif; ?>
@@ -167,7 +172,7 @@ foreach ($indicated_users_by_month as $data) {
 			<!-- Seu código existente para a seção de link de afiliado e convite por e-mail -->
 
 			<div class="w-full rounded-[10px] bg-white p-[40px] my-[30px]">
-				<h2 class="text-gray-700 text-[25px] font-semibold leading-[35px] pb-[20px]">Parcerias</h2>
+				<h2 class="text-gray-700 text-[25px] font-semibold leading-[35px] pb-[20px]">Minhas Indicações</h2>
 				<div>
 					<?php if ($oficinas_com_codigo_varejista) : ?>
 						<table class="border-collapse border border-gray-200">
@@ -201,4 +206,70 @@ foreach ($indicated_users_by_month as $data) {
 	</div>
 
 </section>
+
+<script>
+	jQuery(document).ready(function($) {
+		$('#cnpj').on('keyup', function() {
+			var cnpj = $(this).val();
+
+			if (cnpj === '') {
+				// Se o CNPJ estiver vazio, limpe a mensagem de erro e ative o botão
+				$('#cnpj-error').text('');
+				$('#cnpj-error').removeClass('text-red-500');
+				$('#cnpj-error').addClass('text-gray-500');
+				$('#submit-btn').prop('disabled', false);
+				return; // Sair da função se o CNPJ estiver vazio
+			}
+
+			// Fazer a requisição AJAX
+			$.ajax({
+				url: '<?php echo admin_url('admin-ajax.php'); ?>',
+				type: 'POST',
+				data: {
+					action: 'check_cnpj_existence',
+					cnpj: cnpj
+				},
+				success: function(response) {
+					// Verificar a resposta da primeira consulta (tabela validate_cnpjs)
+					if (response === 'exist') {
+						// CNPJ encontrado na tabela validate_cnpjs, desativar o botão de envio e exibir mensagem de erro
+						$('#submit-btn').prop('disabled', true);
+						$('#cnpj-error').text('CNPJ já existe');
+						$('#cnpj-error').removeClass('text-gray-500');
+						$('#cnpj-error').addClass('text-red-500');
+					} else {
+						// CNPJ não encontrado na tabela validate_cnpjs, realizar a segunda consulta (metadados do usuário)
+						$.ajax({
+							url: '<?php echo admin_url('admin-ajax.php'); ?>',
+							type: 'POST',
+							data: {
+								action: 'check_cnpj_user_meta',
+								cnpj: cnpj
+							},
+							success: function(response) {
+								// Verificar a resposta da segunda consulta (metadados do usuário)
+								if (response === 'exist') {
+									// CNPJ encontrado nos metadados do usuário, desativar o botão de envio e exibir mensagem de erro
+									$('#submit-btn').prop('disabled', true);
+									$('#cnpj-error').text('CNPJ já existe nos metadados do usuário');
+									$('#cnpj-error').removeClass('text-gray-500');
+									$('#cnpj-error').addClass('text-red-500');
+								} else {
+									// CNPJ não encontrado nos metadados do usuário, ativar o botão de envio e exibir mensagem de sucesso
+									$('#submit-btn').prop('disabled', false);
+									$('#cnpj-error').text('CNPJ válido');
+									$('#cnpj-error').removeClass('text-red-500');
+									$('#cnpj-error').addClass('text-green-500');
+								}
+							}
+						});
+					}
+				}
+			});
+
+		});
+	});
+</script>
+
+
 

@@ -207,12 +207,19 @@ function affiliateprog_html5_comment( $comment, $args, $depth ) {
 
 // Redireciona usuários não logados para a página de login personalizada
 function redirect_to_custom_login() {
+	// Verifica se o usuário não está logado e se a página não é a página de login
 	if (!is_user_logged_in() && !is_page_template('login.php')) {
-		wp_redirect(home_url('/login/'));
-		exit();
+		// Verifica se a página atual não é a página de cadastro da oficina
+		if (!is_page('cadastro-oficina')) {
+			// Redireciona para a página de login
+			wp_redirect(home_url('/login/'));
+			exit();
+		}
 	}
 }
 add_action('template_redirect', 'redirect_to_custom_login');
+
+
 
 // Redireciona usuários após o login
 // Função para redirecionar usuários após o login
